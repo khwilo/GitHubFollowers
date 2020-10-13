@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import colors from '../../constants/colors';
+import { globalStyles } from '../../styles/global';
 
 const styles = StyleSheet.create({
   container: {
@@ -24,17 +25,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingTop: 20,
+    marginTop: 20,
   },
   iconContainer: {
     marginBottom: 10,
-  },
-  headerText: {
-    fontWeight: '700',
-    fontSize: 48,
-  },
-  captionText: {
-    fontSize: 24,
   },
   textInput: {
     height: 40,
@@ -52,8 +46,6 @@ const styles = StyleSheet.create({
   },
   submitBtnText: {
     color: colors.white,
-    fontSize: 16,
-    fontWeight: '700',
   },
 });
 
@@ -65,8 +57,8 @@ const Home = () => {
         <View style={styles.iconContainer}>
           <AntDesign name='github' size={100} />
         </View>
-        <Text style={styles.headerText}>GitHub</Text>
-        <Text style={styles.captionText}>Followers</Text>
+        <Text style={globalStyles.logoText}>GitHub</Text>
+        <Text style={globalStyles.titleText}>Followers</Text>
       </View>
       <View style={styles.formInput}>
         <TextInput
@@ -77,7 +69,9 @@ const Home = () => {
           placeholderTextColor={colors.white}
         />
         <TouchableHighlight style={styles.submitBtn}>
-          <Text style={styles.submitBtnText}>Get Followers</Text>
+          <Text style={[globalStyles.buttonText, styles.submitBtnText]}>
+            Get Followers
+          </Text>
         </TouchableHighlight>
       </View>
     </View>
