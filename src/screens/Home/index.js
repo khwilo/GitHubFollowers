@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import {
+  Keyboard,
   StyleSheet,
   Text,
   TextInput,
   TouchableHighlight,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
+
 import colors from '../../constants/colors';
 import { globalStyles } from '../../styles/global';
 
@@ -52,29 +55,31 @@ const styles = StyleSheet.create({
 const Home = () => {
   const [username, setUsername] = useState('');
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.iconContainer}>
-          <AntDesign name='github' size={100} />
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <View style={styles.iconContainer}>
+            <AntDesign name='github' size={100} />
+          </View>
+          <Text style={globalStyles.logoText}>GitHub</Text>
+          <Text style={globalStyles.titleText}>Followers</Text>
         </View>
-        <Text style={globalStyles.logoText}>GitHub</Text>
-        <Text style={globalStyles.titleText}>Followers</Text>
+        <View style={styles.formInput}>
+          <TextInput
+            style={styles.textInput}
+            onChange={(value) => console.log('username: ', value)}
+            value={username}
+            placeholder='Enter Username'
+            placeholderTextColor={colors.white}
+          />
+          <TouchableHighlight style={styles.submitBtn}>
+            <Text style={[globalStyles.buttonText, styles.submitBtnText]}>
+              Get Followers
+            </Text>
+          </TouchableHighlight>
+        </View>
       </View>
-      <View style={styles.formInput}>
-        <TextInput
-          style={styles.textInput}
-          onChange={(value) => console.log('username: ', value)}
-          value={username}
-          placeholder='Enter Username'
-          placeholderTextColor={colors.white}
-        />
-        <TouchableHighlight style={styles.submitBtn}>
-          <Text style={[globalStyles.buttonText, styles.submitBtnText]}>
-            Get Followers
-          </Text>
-        </TouchableHighlight>
-      </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 
