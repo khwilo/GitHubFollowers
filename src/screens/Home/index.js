@@ -22,18 +22,18 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   content: {
-    paddingTop: screen.height * 0.2,
+    flexGrow: 1,
   },
   header: {
-    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingTop: screen.height * 0.2,
   },
   formInput: {
     flex: 1,
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 20,
+    paddingTop: 20,
     paddingBottom: 40,
   },
   iconContainer: {
@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     paddingHorizontal: 60,
+    marginVertical: 20,
   },
   submitBtn: {
     backgroundColor: colors.green,
@@ -62,8 +63,8 @@ const Home = () => {
   const [username, setUsername] = useState('');
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <View style={styles.container}>
-        <ScrollView>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <View style={styles.container}>
           <View style={styles.content}>
             <View style={styles.header}>
               <View style={styles.iconContainer}>
@@ -86,11 +87,9 @@ const Home = () => {
                 </Text>
               </TouchableHighlight>
             </View>
-
-            <View style={{ height: screen.height }} />
           </View>
-        </ScrollView>
-      </View>
+        </View>
+      </ScrollView>
     </TouchableWithoutFeedback>
   );
 };
