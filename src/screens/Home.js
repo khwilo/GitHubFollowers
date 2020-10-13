@@ -13,8 +13,8 @@ import {
 } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
-import colors from '../../constants/colors';
-import { globalStyles } from '../../styles/global';
+import colors from '../constants/colors';
+import { globalStyles } from '../styles/global';
 
 const screen = Dimensions.get('window');
 
