@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const Login = () => {
+const Home = () => {
   const [username, setUsername] = useState('');
   return (
     <View style={styles.container}>
@@ -84,4 +84,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Home;
