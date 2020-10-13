@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   Dimensions,
   Keyboard,
+  KeyboardAvoidingView,
   ScrollView,
   StyleSheet,
   Text,
@@ -34,7 +35,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingTop: 20,
-    paddingBottom: 40,
+    paddingBottom: 20,
   },
   iconContainer: {
     marginBottom: 10,
@@ -52,6 +53,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.green,
     paddingHorizontal: 60,
     paddingVertical: 10,
+    marginVertical: 10,
     borderRadius: 10,
   },
   submitBtnText: {
@@ -73,7 +75,7 @@ const Home = () => {
               <Text style={globalStyles.logoText}>GitHub</Text>
               <Text style={globalStyles.titleText}>Followers</Text>
             </View>
-            <View style={styles.formInput}>
+            <KeyboardAvoidingView style={styles.formInput}>
               <TextInput
                 style={styles.textInput}
                 onChange={(value) => console.log('username: ', value)}
@@ -86,7 +88,7 @@ const Home = () => {
                   Get Followers
                 </Text>
               </TouchableHighlight>
-            </View>
+            </KeyboardAvoidingView>
           </View>
         </View>
       </ScrollView>
