@@ -17,10 +17,11 @@ import { AntDesign } from '@expo/vector-icons';
 import colors from '../constants/colors';
 import globalStyles from '../styles/global';
 
-const screen = Dimensions.get('window');
+const { height } = Dimensions.get('window');
 
 const Home = () => {
-  const [username] = useState('');
+  const [username, setUsername] = useState('');
+
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>
@@ -35,14 +36,21 @@ const Home = () => {
             </View>
             <KeyboardAvoidingView style={styles.formInput}>
               <TextInput
-                style={styles.textInput}
-                onChange={(value) => console.log('username: ', value)}
+                style={[globalStyles.formControl, styles.textInput]}
+                onChangeText={(value) => setUsername(value)}
                 value={username}
                 placeholder="Enter Username"
                 placeholderTextColor={colors.white}
+                autoCorrect={false}
               />
               <TouchableHighlight style={styles.submitBtn}>
-                <Text style={[globalStyles.buttonText, styles.submitBtnText]}>
+                <Text
+                  style={[
+                    globalStyles.buttonText,
+                    globalStyles.formControl,
+                    styles.submitBtnText,
+                  ]}
+                >
                   Get Followers
                 </Text>
               </TouchableHighlight>
@@ -67,7 +75,7 @@ const styles = StyleSheet.create({
   header: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: screen.height * 0.2,
+    paddingTop: height * 0.2,
   },
   formInput: {
     flex: 1,
@@ -81,16 +89,15 @@ const styles = StyleSheet.create({
   },
   textInput: {
     height: 40,
+    color: colors.white,
     backgroundColor: colors.gray,
     borderColor: colors.gray,
     borderWidth: 1,
     borderRadius: 10,
-    paddingHorizontal: 60,
     marginVertical: 20,
   },
   submitBtn: {
     backgroundColor: colors.green,
-    paddingHorizontal: 60,
     paddingVertical: 10,
     marginVertical: 10,
     borderRadius: 10,
