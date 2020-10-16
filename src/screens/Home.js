@@ -11,14 +11,53 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { AntDesign } from '@expo/vector-icons';
 
 import colors from '../constants/colors';
-import { globalStyles } from '../styles/global';
+import globalStyles from '../styles/global';
 
 const screen = Dimensions.get('window');
 
+const Home = () => {
+  const [username] = useState('');
+  return (
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+        <View style={styles.container}>
+          <View style={styles.content}>
+            <View style={styles.header}>
+              <View style={styles.iconContainer}>
+                <AntDesign name="github" size={100} />
+              </View>
+              <Text style={globalStyles.logoText}>GitHub</Text>
+              <Text style={globalStyles.titleText}>Followers</Text>
+            </View>
+            <KeyboardAvoidingView style={styles.formInput}>
+              <TextInput
+                style={styles.textInput}
+                onChange={(value) => console.log('username: ', value)}
+                value={username}
+                placeholder="Enter Username"
+                placeholderTextColor={colors.white}
+              />
+              <TouchableHighlight style={styles.submitBtn}>
+                <Text style={[globalStyles.buttonText, styles.submitBtnText]}>
+                  Get Followers
+                </Text>
+              </TouchableHighlight>
+            </KeyboardAvoidingView>
+          </View>
+        </View>
+      </ScrollView>
+    </TouchableWithoutFeedback>
+  );
+};
+
 const styles = StyleSheet.create({
+  scrollViewContainer: {
+    flexGrow: 1,
+  },
   container: {
     flex: 1,
   },
@@ -60,40 +99,5 @@ const styles = StyleSheet.create({
     color: colors.white,
   },
 });
-
-const Home = () => {
-  const [username, setUsername] = useState('');
-  return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        <View style={styles.container}>
-          <View style={styles.content}>
-            <View style={styles.header}>
-              <View style={styles.iconContainer}>
-                <AntDesign name='github' size={100} />
-              </View>
-              <Text style={globalStyles.logoText}>GitHub</Text>
-              <Text style={globalStyles.titleText}>Followers</Text>
-            </View>
-            <KeyboardAvoidingView style={styles.formInput}>
-              <TextInput
-                style={styles.textInput}
-                onChange={(value) => console.log('username: ', value)}
-                value={username}
-                placeholder='Enter Username'
-                placeholderTextColor={colors.white}
-              />
-              <TouchableHighlight style={styles.submitBtn}>
-                <Text style={[globalStyles.buttonText, styles.submitBtnText]}>
-                  Get Followers
-                </Text>
-              </TouchableHighlight>
-            </KeyboardAvoidingView>
-          </View>
-        </View>
-      </ScrollView>
-    </TouchableWithoutFeedback>
-  );
-};
 
 export default Home;
