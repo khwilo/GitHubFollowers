@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+/* eslint-disable import/no-extraneous-dependencies */
+import React, { useContext } from 'react';
 import {
+  ActivityIndicator,
   Dimensions,
   Keyboard,
   KeyboardAvoidingView,
@@ -11,16 +13,19 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { AntDesign } from '@expo/vector-icons';
 
 import colors from '../constants/colors';
 import globalStyles from '../styles/global';
+import { FollowersContext } from '../util/context';
 
 const { height } = Dimensions.get('window');
+const HEADER_TOP_PADDING = height * 0.2;
 
 const Home = () => {
-  const [username, setUsername] = useState('');
+  const { username, setUsername, getFollowers, isLoading } = useContext(
+    FollowersContext,
+  );
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -43,17 +48,24 @@ const Home = () => {
                 placeholderTextColor={colors.white}
                 autoCorrect={false}
               />
-              <TouchableHighlight style={styles.submitBtn}>
-                <Text
-                  style={[
-                    globalStyles.buttonText,
-                    globalStyles.formControl,
-                    styles.submitBtnText,
-                  ]}
+              {isLoading ? (
+                <ActivityIndicator color={colors.green} size="large" />
+              ) : (
+                <TouchableHighlight
+                  style={styles.submitBtn}
+                  onPress={getFollowers}
                 >
-                  Get Followers
-                </Text>
-              </TouchableHighlight>
+                  <Text
+                    style={[
+                      globalStyles.buttonText,
+                      globalStyles.formControl,
+                      styles.submitBtnText,
+                    ]}
+                  >
+                    Get Followers
+                  </Text>
+                </TouchableHighlight>
+              )}
             </KeyboardAvoidingView>
           </View>
         </View>
@@ -75,7 +87,7 @@ const styles = StyleSheet.create({
   header: {
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: height * 0.2,
+    paddingTop: HEADER_TOP_PADDING,
   },
   formInput: {
     flex: 1,
