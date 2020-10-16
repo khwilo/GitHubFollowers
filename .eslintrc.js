@@ -1,6 +1,6 @@
 module.exports = {
-  extends: 'airbnb',
-  plugins: ['react', 'react-native', 'react-hooks'],
+  extends: ['airbnb', 'prettier'],
+  plugins: ['react', 'react-native', 'react-hooks', 'prettier'],
   parser: 'babel-eslint',
   parserOptions: {
     ecmaFeatures: {
@@ -12,6 +12,7 @@ module.exports = {
     'react-native/react-native': true,
   },
   rules: {
+    'prettier/prettier': ['error'],
     'no-use-before-define': [
       'error',
       { functions: true, classes: true, variables: false },
