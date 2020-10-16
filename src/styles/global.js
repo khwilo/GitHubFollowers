@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-export const globalStyles = StyleSheet.create({
+const globalStyles = StyleSheet.create({
   logoText: {
     fontSize: 48,
     fontWeight: '700',
@@ -19,3 +19,5 @@ export const globalStyles = StyleSheet.create({
     fontWeight: '700',
   },
 });
+
+export default globalStyles;
