@@ -1,6 +1,7 @@
 import { StyleSheet, Dimensions } from 'react-native';
 
 const { width } = Dimensions.get('window');
+const FORM_CONTROL_WIDTH = width * 0.6;
 
 const globalStyles = StyleSheet.create({
   logoText: {
@@ -22,7 +23,7 @@ const globalStyles = StyleSheet.create({
   },
   formControl: {
     paddingHorizontal: 20,
-    width: width * 0.6,
+    width: FORM_CONTROL_WIDTH,
     textAlign: 'center',
   },
 });
