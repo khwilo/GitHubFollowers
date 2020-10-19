@@ -5,7 +5,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  TouchableHighlight,
+  TouchableOpacity,
 } from 'react-native';
 
 import colors from '../constants/colors';
@@ -30,7 +30,7 @@ const FormInput = () => {
       {isLoading ? (
         <ActivityIndicator color={colors.green} size="large" />
       ) : (
-        <TouchableHighlight style={styles.submitBtn} onPress={getFollowers}>
+        <TouchableOpacity style={styles.submitBtn} onPress={getFollowers}>
           <Text
             style={[
               globalStyles.buttonText,
@@ -40,7 +40,7 @@ const FormInput = () => {
           >
             Get Followers
           </Text>
-        </TouchableHighlight>
+        </TouchableOpacity>
       )}
     </KeyboardAvoidingView>
   );
