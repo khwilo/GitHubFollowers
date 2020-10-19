@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import FollowersDisplayScreen from '../screens/FollowersDisplay';
 import HomeScreen from '../screens/Home';
+import FollowerProfileScreen from '../screens/FollowerProfile';
 
 import { FollowersContextProvider } from '../contexts/FollowersContext';
 
@@ -15,6 +16,10 @@ const MainStackScreen = () => (
     <MainStack.Screen
       name="Followers display"
       component={FollowersDisplayScreen}
+    />
+    <MainStack.Screen
+      name="Follower profile"
+      component={FollowerProfileScreen}
     />
   </MainStack.Navigator>
 );
