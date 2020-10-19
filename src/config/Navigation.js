@@ -11,7 +11,7 @@ import { FollowersContextProvider } from '../contexts/FollowersContext';
 const MainStack = createStackNavigator();
 
 const MainStackScreen = () => (
-  <MainStack.Navigator>
+  <MainStack.Navigator headerMode="none">
     <MainStack.Screen name="Home" component={HomeScreen} />
     <MainStack.Screen
       name="Followers display"
