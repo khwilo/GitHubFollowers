@@ -10,7 +10,7 @@ import {
 
 import colors from '../constants/colors';
 import globalStyles from '../styles/global';
-import { FollowersContext } from '../util/context';
+import { FollowersContext } from '../contexts/FollowersContext';
 
 const FormInput = ({ navigation }) => {
   const { username, setUsername, getFollowers, isLoading } = useContext(

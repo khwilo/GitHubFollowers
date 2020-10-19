@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import FollowersDisplayScreen from '../screens/FollowersDisplay';
 import HomeScreen from '../screens/Home';
 
-import { FollowersContextProvider } from '../util/context';
+import { FollowersContextProvider } from '../contexts/FollowersContext';
 
 const MainStack = createStackNavigator();
 

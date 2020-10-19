@@ -1,7 +1,7 @@
 import React, { createContext, useState } from 'react';
 import { Alert } from 'react-native';
 
-import fetchFollowers from '../api';
+import fetchFollowers from '../util/api';
 
 export const FollowersContext = createContext();
 
