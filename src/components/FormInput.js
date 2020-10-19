@@ -12,7 +12,7 @@ import colors from '../constants/colors';
 import globalStyles from '../styles/global';
 import { FollowersContext } from '../util/context';
 
-const FormInput = () => {
+const FormInput = ({ navigation }) => {
   const { username, setUsername, getFollowers, isLoading } = useContext(
     FollowersContext,
   );
@@ -30,7 +30,10 @@ const FormInput = () => {
       {isLoading ? (
         <ActivityIndicator color={colors.green} size="large" />
       ) : (
-        <TouchableOpacity style={styles.submitBtn} onPress={getFollowers}>
+        <TouchableOpacity
+          style={styles.submitBtn}
+          onPress={() => navigation.navigate('Followers display')}
+        >
           <Text
             style={[
               globalStyles.buttonText,

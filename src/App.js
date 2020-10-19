@@ -1,12 +1,7 @@
 import React from 'react';
 
-import Home from './screens/Home';
-import { FollowersContextProvider } from './util/context';
+import Navigation from './config/Navigation';
 
 export default function App() {
-  return (
-    <FollowersContextProvider>
-      <Home />
-    </FollowersContextProvider>
-  );
+  return <Navigation />;
 }
