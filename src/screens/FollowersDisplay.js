@@ -1,14 +1,15 @@
 import React from 'react';
-import { Text, View, Button } from 'react-native';
+import { Button, Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const FollowersDisplay = ({ navigation }) => (
-  <View>
+  <SafeAreaView>
     <Text>Followers screen!</Text>
     <Button
       title="View profile"
       onPress={() => navigation.navigate('Follower profile')}
     />
-  </View>
+  </SafeAreaView>
 );
 
 export default FollowersDisplay;

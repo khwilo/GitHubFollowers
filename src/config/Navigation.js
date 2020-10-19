@@ -1,12 +1,13 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-
-import FollowersDisplayScreen from '../screens/FollowersDisplay';
-import HomeScreen from '../screens/Home';
-import FollowerProfileScreen from '../screens/FollowerProfile';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { FollowersContextProvider } from '../contexts/FollowersContext';
+
+import FollowerProfileScreen from '../screens/FollowerProfile';
+import FollowersDisplayScreen from '../screens/FollowersDisplay';
+import HomeScreen from '../screens/Home';
 
 const MainStack = createStackNavigator();
 
@@ -25,11 +26,13 @@ const MainStackScreen = () => (
 );
 
 const Navigation = () => (
-  <NavigationContainer>
-    <FollowersContextProvider>
-      <MainStackScreen />
-    </FollowersContextProvider>
-  </NavigationContainer>
+  <SafeAreaProvider>
+    <NavigationContainer>
+      <FollowersContextProvider>
+        <MainStackScreen />
+      </FollowersContextProvider>
+    </NavigationContainer>
+  </SafeAreaProvider>
 );
 
 export default Navigation;

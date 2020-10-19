@@ -1,11 +1,12 @@
 import React from 'react';
-import { Text, View, Button } from 'react-native';
+import { Button, Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const FollowerProfile = ({ navigation }) => (
-  <View>
+  <SafeAreaView>
     <Text>Follower Profile</Text>
     <Button title="Go back" onPress={() => navigation.pop()} />
-  </View>
+  </SafeAreaView>
 );
 
 export default FollowerProfile;
