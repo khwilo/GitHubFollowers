@@ -7,6 +7,8 @@ import { TouchableOpacity } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { AntDesign, Ionicons } from '@expo/vector-icons';
+
+import Done from '../components/Done';
 import colors from '../constants/colors';
 import { FollowersContextProvider } from '../contexts/FollowersContext';
 
@@ -60,7 +62,23 @@ const FavoritesStack = () => (
 
 const ProfileStack = () => (
   <Stack.Navigator>
-    <Stack.Screen name="Follower profile" component={ProfileScreen} />
+    <Stack.Screen
+      name="Profile"
+      component={ProfileScreen}
+      options={({ navigation }) => ({
+        headerTintColor: colors.green,
+        headerLeft: null,
+        headerTitle: null,
+        headerRight: () => (
+          <TouchableOpacity
+            style={globalStyles.navHorizontalPadding}
+            onPress={() => navigation.goBack()}
+          >
+            <Done />
+          </TouchableOpacity>
+        ),
+      })}
+    />
   </Stack.Navigator>
 );
 
@@ -90,12 +108,8 @@ const StackTabs = () => (
 );
 
 const RootStackScreen = () => (
-  <Stack.Navigator>
-    <Stack.Screen
-      name="Home stack tabs"
-      component={StackTabs}
-      options={{ headerShown: false }}
-    />
+  <Stack.Navigator headerMode="none">
+    <Stack.Screen name="Home" component={StackTabs} />
     <Stack.Screen name="Profile" component={ProfileStack} />
   </Stack.Navigator>
 );
