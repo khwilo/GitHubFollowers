@@ -32,7 +32,7 @@ const FormInput = ({ navigation }) => {
       ) : (
         <TouchableOpacity
           style={styles.submitBtn}
-          onPress={() => navigation.navigate('Followers display')}
+          onPress={() => navigation.navigate('Followers list')}
         >
           <Text
             style={[
