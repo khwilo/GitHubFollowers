@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     marginVertical: 10,
     borderRadius: 10,
+    elevation: 2,
   },
   submitBtnText: {
     color: colors.white,
