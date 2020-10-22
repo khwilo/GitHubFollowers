@@ -5,14 +5,14 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  TouchableHighlight,
+  TouchableOpacity,
 } from 'react-native';
 
 import colors from '../constants/colors';
 import globalStyles from '../styles/global';
-import { FollowersContext } from '../util/context';
+import { FollowersContext } from '../contexts/FollowersContext';
 
-const FormInput = () => {
+const FormInput = ({ navigation }) => {
   const { username, setUsername, getFollowers, isLoading } = useContext(
     FollowersContext,
   );
@@ -30,7 +30,10 @@ const FormInput = () => {
       {isLoading ? (
         <ActivityIndicator color={colors.green} size="large" />
       ) : (
-        <TouchableHighlight style={styles.submitBtn} onPress={getFollowers}>
+        <TouchableOpacity
+          style={styles.submitBtn}
+          onPress={() => navigation.navigate('Followers list')}
+        >
           <Text
             style={[
               globalStyles.buttonText,
@@ -40,7 +43,7 @@ const FormInput = () => {
           >
             Get Followers
           </Text>
-        </TouchableHighlight>
+        </TouchableOpacity>
       )}
     </KeyboardAvoidingView>
   );
@@ -68,6 +71,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     marginVertical: 10,
     borderRadius: 10,
+    elevation: 2,
   },
   submitBtnText: {
     color: colors.white,

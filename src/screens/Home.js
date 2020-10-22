@@ -10,14 +10,14 @@ import {
 import Banner from '../components/Banner';
 import FormInput from '../components/FormInput';
 
-const Home = () => {
+const Home = ({ navigation }) => {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <ScrollView contentContainerStyle={styles.scrollViewContainer}>
         <View style={styles.container}>
           <View style={styles.content}>
             <Banner />
-            <FormInput />
+            <FormInput navigation={navigation} />
           </View>
         </View>
       </ScrollView>
