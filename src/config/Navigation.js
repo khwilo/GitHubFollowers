@@ -56,7 +56,27 @@ const HomeStack = () => (
 
 const FavoritesStack = () => (
   <Stack.Navigator>
-    <Stack.Screen name="Favorites" component={FavoritesScreen} />
+    <Stack.Screen
+      name="Favorites"
+      component={FavoritesScreen}
+      options={({ navigation }) => ({
+        headerTintColor: colors.green,
+        headerTitleContainerStyle: { left: 40 },
+        headerLeft: () => (
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={globalStyles.navHorizontalPadding}
+          >
+            <AntDesign name="left" size={24} color={colors.green} />
+          </TouchableOpacity>
+        ),
+        headerRight: () => (
+          <TouchableOpacity style={globalStyles.navHorizontalPadding}>
+            <AntDesign name="plus" size={24} color={colors.green} />
+          </TouchableOpacity>
+        ),
+      })}
+    />
   </Stack.Navigator>
 );
 
