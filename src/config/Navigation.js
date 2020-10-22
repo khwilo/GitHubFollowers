@@ -9,15 +9,39 @@ import { Ionicons } from '@expo/vector-icons';
 
 import colors from '../constants/colors';
 import { FollowersContextProvider } from '../contexts/FollowersContext';
-import FavoritesScreen from '../screens/Favorites';
-import FollowerProfileScreen from '../screens/FollowerProfile';
-import FollowersDisplayScreen from '../screens/FollowersDisplay';
-import HomeScreen from '../screens/Home';
 
-const MainStack = createStackNavigator();
+import FavoritesScreen from '../screens/Favorites';
+import FollowersListScreen from '../screens/FollowersList';
+import HomeScreen from '../screens/Home';
+import ProfileScreen from '../screens/Profile';
+
+const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const HomeTabs = () => (
+const HomeStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="Home"
+      component={HomeScreen}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen name="Followers list" component={FollowersListScreen} />
+  </Stack.Navigator>
+);
+
+const FavoritesStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen name="Favorites" component={FavoritesScreen} />
+  </Stack.Navigator>
+);
+
+const ProfileStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen name="Follower profile" component={ProfileScreen} />
+  </Stack.Navigator>
+);
+
+const StackTabs = () => (
   <Tab.Navigator
     screenOptions={({ route }) => ({
       tabBarIcon: ({ focused, color, size }) => {
@@ -37,30 +61,27 @@ const HomeTabs = () => (
       inactiveTintColor: colors.gray,
     }}
   >
-    <Tab.Screen name="Search" component={HomeScreen} />
-    <Tab.Screen name="Favorites" component={FavoritesScreen} />
+    <Tab.Screen name="Search" component={HomeStack} />
+    <Tab.Screen name="Favorites" component={FavoritesStack} />
   </Tab.Navigator>
 );
 
-const MainStackScreen = () => (
-  <MainStack.Navigator headerMode="none">
-    <MainStack.Screen name="Home" component={HomeTabs} />
-    <MainStack.Screen
-      name="Followers display"
-      component={FollowersDisplayScreen}
+const RootStackScreen = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="Home stack tabs"
+      component={StackTabs}
+      options={{ headerShown: false }}
     />
-    <MainStack.Screen
-      name="Follower profile"
-      component={FollowerProfileScreen}
-    />
-  </MainStack.Navigator>
+    <Stack.Screen name="Profile" component={ProfileStack} />
+  </Stack.Navigator>
 );
 
 const Navigation = () => (
   <SafeAreaProvider>
     <NavigationContainer>
       <FollowersContextProvider>
-        <MainStackScreen />
+        <RootStackScreen />
       </FollowersContextProvider>
     </NavigationContainer>
   </SafeAreaProvider>
