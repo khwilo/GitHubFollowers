@@ -26,6 +26,9 @@ const globalStyles = StyleSheet.create({
     width: FORM_CONTROL_WIDTH,
     textAlign: 'center',
   },
+  navHorizontalPadding: {
+    paddingHorizontal: 10,
+  },
 });
 
 export default globalStyles;

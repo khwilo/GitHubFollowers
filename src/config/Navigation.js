@@ -3,10 +3,10 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { TouchableOpacity } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import { Ionicons } from '@expo/vector-icons';
-
+import { AntDesign, Ionicons } from '@expo/vector-icons';
 import colors from '../constants/colors';
 import { FollowersContextProvider } from '../contexts/FollowersContext';
 
@@ -14,6 +14,8 @@ import FavoritesScreen from '../screens/Favorites';
 import FollowersListScreen from '../screens/FollowersList';
 import HomeScreen from '../screens/Home';
 import ProfileScreen from '../screens/Profile';
+
+import globalStyles from '../styles/global';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -25,7 +27,28 @@ const HomeStack = () => (
       component={HomeScreen}
       options={{ headerShown: false }}
     />
-    <Stack.Screen name="Followers list" component={FollowersListScreen} />
+    <Stack.Screen
+      name="Followers list"
+      component={FollowersListScreen}
+      options={({ navigation }) => ({
+        title: 'Search',
+        headerTintColor: colors.green,
+        headerTitleContainerStyle: { left: 40 },
+        headerRight: () => (
+          <TouchableOpacity style={globalStyles.navHorizontalPadding}>
+            <AntDesign name="plus" size={24} color={colors.green} />
+          </TouchableOpacity>
+        ),
+        headerLeft: () => (
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            style={globalStyles.navHorizontalPadding}
+          >
+            <AntDesign name="left" size={24} color={colors.green} />
+          </TouchableOpacity>
+        ),
+      })}
+    />
   </Stack.Navigator>
 );
 
