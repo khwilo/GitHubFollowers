@@ -46,7 +46,6 @@ const FollowersList = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginVertical: 20,
   },
   item: {
     alignItems: 'center',
