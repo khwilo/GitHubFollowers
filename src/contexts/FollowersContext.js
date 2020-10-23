@@ -15,7 +15,6 @@ export const FollowersContextProvider = ({ children }) => {
 
     return fetchFollowers(username)
       .then((data) => {
-        setUsername('');
         if (Array.isArray(data)) {
           setFollowers(data);
         } else {
@@ -25,7 +24,10 @@ export const FollowersContextProvider = ({ children }) => {
       .catch((error) => {
         Alert.alert('Sorry, something went wrong', error.message);
       })
-      .finally(() => setIsLoading(false));
+      .finally(() => {
+        setUsername('');
+        setIsLoading(false);
+      });
   };
 
   const contextValues = {
