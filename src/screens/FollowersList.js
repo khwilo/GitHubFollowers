@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 
 import colors from '../constants/colors';
+import truncateText from '../util/truncateText';
 
 const NUM_OF_COLUMNS = 3;
 const ITEM_HEIGHT = Dimensions.get('window').width / NUM_OF_COLUMNS;
@@ -17,7 +18,7 @@ const Item = ({ login, avatarUrl }) => {
   return (
     <View style={styles.item}>
       <Image style={styles.image} source={{ uri: avatarUrl }} />
-      <Text style={styles.textContent}>{login}</Text>
+      <Text style={styles.textContent}>{truncateText(login)}</Text>
     </View>
   );
 };
