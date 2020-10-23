@@ -13,9 +13,13 @@ import globalStyles from '../styles/global';
 import { FollowersContext } from '../contexts/FollowersContext';
 
 const FormInput = ({ navigation }) => {
-  const { username, setUsername, getFollowers, isLoading } = useContext(
-    FollowersContext,
-  );
+  const {
+    username,
+    setUsername,
+    getFollowers,
+    isLoading,
+    followers,
+  } = useContext(FollowersContext);
 
   return (
     <KeyboardAvoidingView style={styles.formInput}>
@@ -32,7 +36,10 @@ const FormInput = ({ navigation }) => {
       ) : (
         <TouchableOpacity
           style={styles.submitBtn}
-          onPress={() => navigation.navigate('Followers list')}
+          onPress={() => {
+            getFollowers();
+            navigation.navigate('Followers list', { followers });
+          }}
         >
           <Text
             style={[
