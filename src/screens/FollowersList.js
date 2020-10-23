@@ -1,18 +1,41 @@
 import React from 'react';
-import { Button, Text } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
 
 import colors from '../constants/colors';
 
-const FollowersList = ({ navigation }) => (
-  <SafeAreaView>
-    <Text>Followers screen!</Text>
-    <Button
-      title="View profile"
-      color={colors.green}
-      onPress={() => navigation.navigate('Profile')}
-    />
-  </SafeAreaView>
+const Item = ({ login }) => (
+  <View style={styles.item}>
+    <Text>{login}</Text>
+  </View>
 );
+
+const FollowersList = ({ navigation, route }) => {
+  const { followers } = route.params;
+
+  const renderItem = ({ item }) => <Item login={item.login} />;
+
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={followers}
+        renderItem={renderItem}
+        keyExtractor={(item) => String(item.id)}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  item: {
+    backgroundColor: colors.green,
+    paddingVertical: 40,
+    marginVertical: 2,
+    marginHorizontal: 2,
+    alignItems: 'center',
+  },
+});
 
 export default FollowersList;
