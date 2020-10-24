@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -9,13 +9,24 @@ import {
 } from 'react-native';
 
 import colors from '../constants/colors';
-import globalStyles from '../styles/global';
 import { FollowersContext } from '../contexts/FollowersContext';
+import globalStyles from '../styles/global';
 
 const FormInput = ({ navigation }) => {
-  const { username, setUsername, getFollowers, isLoading } = useContext(
-    FollowersContext,
-  );
+  const {
+    username,
+    setUsername,
+    getFollowers,
+    isLoading,
+    followers,
+    isFetched,
+  } = useContext(FollowersContext);
+
+  useEffect(() => {
+    if (isFetched && !isLoading) {
+      navigation.navigate('Followers list', { followers });
+    }
+  }, [isFetched, isLoading, followers, navigation]);
 
   return (
     <KeyboardAvoidingView style={styles.formInput}>
@@ -32,7 +43,7 @@ const FormInput = ({ navigation }) => {
       ) : (
         <TouchableOpacity
           style={styles.submitBtn}
-          onPress={() => navigation.navigate('Followers list')}
+          onPress={() => getFollowers()}
         >
           <Text
             style={[

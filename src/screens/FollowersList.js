@@ -1,18 +1,73 @@
 import React from 'react';
-import { Button, Text } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {
+  Dimensions,
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 
+import NoFollowers from '../components/NoFollowers';
 import colors from '../constants/colors';
+import truncateText from '../util/truncateText';
 
-const FollowersList = ({ navigation }) => (
-  <SafeAreaView>
-    <Text>Followers screen!</Text>
-    <Button
-      title="View profile"
-      color={colors.green}
-      onPress={() => navigation.navigate('Profile')}
-    />
-  </SafeAreaView>
-);
+const NUM_OF_COLUMNS = 3;
+const ITEM_HEIGHT = Dimensions.get('window').width / NUM_OF_COLUMNS;
+
+const Item = ({ login, avatarUrl }) => {
+  return (
+    <View style={styles.item}>
+      <Image style={styles.image} source={{ uri: avatarUrl }} />
+      <Text style={styles.textContent}>{truncateText(login)}</Text>
+    </View>
+  );
+};
+
+const FollowersList = ({ navigation, route }) => {
+  const { followers } = route.params;
+
+  const renderItem = ({ item }) => (
+    <Item login={item.login} avatarUrl={item.avatar_url} />
+  );
+
+  return (
+    <View style={styles.container}>
+      {followers.length === 0 ? (
+        <NoFollowers />
+      ) : (
+        <FlatList
+          data={followers}
+          renderItem={renderItem}
+          keyExtractor={(item) => String(item.id)}
+          horizontal={false}
+          numColumns={NUM_OF_COLUMNS}
+        />
+      )}
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  item: {
+    alignItems: 'center',
+    flex: 1,
+    margin: 10,
+    height: ITEM_HEIGHT,
+  },
+  image: {
+    height: 100,
+    width: 100,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  textContent: {
+    color: colors.black,
+    fontWeight: '700',
+  },
+});
 
 export default FollowersList;

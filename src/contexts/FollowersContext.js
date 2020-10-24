@@ -9,23 +9,38 @@ export const FollowersContextProvider = ({ children }) => {
   const [username, setUsername] = useState('');
   const [followers, setFollowers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isFetched, setIsFetched] = useState(false);
 
-  const getFollowers = () => {
+  const getFollowers = async () => {
     setIsLoading(true);
 
-    return fetchFollowers(username)
-      .then((data) => {
-        setUsername('');
+    if (username.length === 0) {
+      Alert.alert(
+        'Empty Username',
+        'Please enter a username. We need to know who to look for 😀.',
+      );
+      setIsLoading(false);
+      setIsFetched(false);
+    } else {
+      try {
+        const data = await fetchFollowers(username);
         if (Array.isArray(data)) {
           setFollowers(data);
+          setIsFetched(true);
+          setIsLoading(false);
+          setUsername('');
         } else {
-          Alert.alert('Sorry, something went wrong', data.message);
+          setIsFetched(false);
+          setIsLoading(false);
+          setUsername('');
+          Alert.alert('User not found', 'Try searching for another user 😔.');
         }
-      })
-      .catch((error) => {
-        Alert.alert('Sorry, something went wrong', error.message);
-      })
-      .finally(() => setIsLoading(false));
+      } catch (err) {
+        setIsFetched(false);
+        setIsLoading(false);
+        setUsername('');
+      }
+    }
   };
 
   const contextValues = {
@@ -35,6 +50,7 @@ export const FollowersContextProvider = ({ children }) => {
     setFollowers,
     getFollowers,
     isLoading,
+    isFetched,
   };
 
   return (
