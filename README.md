@@ -26,7 +26,6 @@ This React Native mobile application allows you to:
 - [ ] Animate user avatars on search
 - [ ] Implement persistent storage
 
-
 ## Credit
 
 [Khwilo Kabaka](https://www.github.com).
