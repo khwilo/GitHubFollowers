@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native';
 
+import NoFollowers from '../components/NoFollowers';
 import colors from '../constants/colors';
 import truncateText from '../util/truncateText';
 
@@ -32,13 +33,17 @@ const FollowersList = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={followers}
-        renderItem={renderItem}
-        keyExtractor={(item) => String(item.id)}
-        horizontal={false}
-        numColumns={NUM_OF_COLUMNS}
-      />
+      {followers.length === 0 ? (
+        <NoFollowers />
+      ) : (
+        <FlatList
+          data={followers}
+          renderItem={renderItem}
+          keyExtractor={(item) => String(item.id)}
+          horizontal={false}
+          numColumns={NUM_OF_COLUMNS}
+        />
+      )}
     </View>
   );
 };

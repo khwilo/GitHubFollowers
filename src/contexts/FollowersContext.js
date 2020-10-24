@@ -24,10 +24,17 @@ export const FollowersContextProvider = ({ children }) => {
     } else {
       try {
         const data = await fetchFollowers(username);
-        setFollowers(data);
-        setIsFetched(true);
-        setIsLoading(false);
-        setUsername('');
+        if (Array.isArray(data)) {
+          setFollowers(data);
+          setIsFetched(true);
+          setIsLoading(false);
+          setUsername('');
+        } else {
+          setIsFetched(false);
+          setIsLoading(false);
+          setUsername('');
+          Alert.alert('User not found', 'Try searching for another user 😔.');
+        }
       } catch (err) {
         setIsFetched(false);
         setIsLoading(false);
