@@ -9,25 +9,28 @@ export const FollowersContextProvider = ({ children }) => {
   const [username, setUsername] = useState('');
   const [followers, setFollowers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isFetched, setIsFetched] = useState(false);
 
-  const getFollowers = () => {
+  const getFollowers = async () => {
     setIsLoading(true);
 
-    return fetchFollowers(username)
-      .then((data) => {
-        if (Array.isArray(data)) {
-          setFollowers(data);
-        } else {
-          Alert.alert('Sorry, something went wrong', data.message);
-        }
-      })
-      .catch((error) => {
-        Alert.alert('Sorry, something went wrong', error.message);
-      })
-      .finally(() => {
-        setUsername('');
+    if (username.length === 0) {
+      Alert.alert('Sorry something is wrong', 'no username');
+      setIsLoading(false);
+      setIsFetched(false);
+    } else {
+      try {
+        const data = await fetchFollowers(username);
+        setFollowers(data);
+        setIsFetched(true);
         setIsLoading(false);
-      });
+        setUsername('');
+      } catch (err) {
+        setIsFetched(false);
+        setIsLoading(false);
+        setUsername('');
+      }
+    }
   };
 
   const contextValues = {
@@ -37,6 +40,7 @@ export const FollowersContextProvider = ({ children }) => {
     setFollowers,
     getFollowers,
     isLoading,
+    isFetched,
   };
 
   return (
