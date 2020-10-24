@@ -1,9 +1,12 @@
 # GitHub Followers
 
+![GiHub Followers App Home screen image](https://github.com/khwilo/project-demos/blob/master/GitHubFollowers/github-followers-home-screen.png)
+
 This React Native mobile application allows you to:
 
-- List GitHub followers
-- View the profiles of the GitHub followers
+- Fetch the followers for a particular GitHub user
+- List the GitHub followers
+- View the individual profiles of the GitHub followers
 - Add a GitHub user to a favorites list
 - Remove a GitHub user from the favorites list
 
@@ -14,10 +17,10 @@ This React Native mobile application allows you to:
 - [x] Customize navigation bar
 - [x] Pass data to various screens on navigation
 - [x] Manage global state using Context API
-- [ ] Image caching after fetch
-- [ ] Pagination of network calls
+- [ ] Cache images after fetch
+- [ ] Paginate network calls requests
 - [x] Handle empty states
-- [ ] Creating custom reusable alerts
+- [ ] Create custom reusable alerts
 - [ ] Animate user avatars on search
 - [ ] Implement persistent storage
 
