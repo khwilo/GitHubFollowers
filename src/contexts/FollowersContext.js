@@ -15,7 +15,10 @@ export const FollowersContextProvider = ({ children }) => {
     setIsLoading(true);
 
     if (username.length === 0) {
-      Alert.alert('Sorry something is wrong', 'no username');
+      Alert.alert(
+        'Empty Username',
+        'Please enter a username. We need to know who to look for 😀.',
+      );
       setIsLoading(false);
       setIsFetched(false);
     } else {
