@@ -1,5 +1,7 @@
 # GitHub Followers
 
+:construction: _**Work still in progress**_
+
 ![GiHub Followers App Home screen image](https://github.com/khwilo/project-demos/blob/master/GitHubFollowers/github-followers-home-screen.png)
 
 This React Native mobile application allows you to:
