@@ -25,6 +25,8 @@ const Item = ({ login, avatarUrl }) => {
 };
 
 const FollowersList = ({ navigation, route }) => {
+  // TODO: DISPLAY ITEMS IN A GRID LAYOUT
+
   const { followers } = route.params;
 
   const renderItem = ({ item }) => (
