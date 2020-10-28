@@ -1,27 +1,38 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Dimensions,
   FlatList,
   Image,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 
 import NoFollowers from '../components/NoFollowers';
 import colors from '../constants/colors';
+import { FollowersContext } from '../contexts/FollowersContext';
 import formatGridData from '../util/formatGridData';
 import truncateText from '../util/truncateText';
 
 const NUM_OF_COLUMNS = 3;
 const ITEM_HEIGHT = Dimensions.get('window').width / NUM_OF_COLUMNS;
 
-const Item = ({ login, avatarUrl }) => {
+const Item = ({ id, login, avatarUrl, navigation }) => {
+  const { setUserId } = useContext(FollowersContext);
+
   return (
-    <View style={styles.item}>
-      <Image style={styles.image} source={{ uri: avatarUrl }} />
-      <Text style={styles.textContent}>{truncateText(login)}</Text>
-    </View>
+    <TouchableOpacity
+      onPress={() => {
+        setUserId(id);
+        navigation.navigate('Profile');
+      }}
+    >
+      <View style={styles.item}>
+        <Image style={styles.image} source={{ uri: avatarUrl }} />
+        <Text style={styles.textContent}>{truncateText(login)}</Text>
+      </View>
+    </TouchableOpacity>
   );
 };
 
@@ -33,7 +44,14 @@ const FollowersList = ({ navigation, route }) => {
       return <View style={[styles.item, styles.emptyView]} />;
     }
 
-    return <Item login={item.login} avatarUrl={item.avatar_url} />;
+    return (
+      <Item
+        id={item.id}
+        login={item.login}
+        avatarUrl={item.avatar_url}
+        navigation={navigation}
+      />
+    );
   };
 
   return (
