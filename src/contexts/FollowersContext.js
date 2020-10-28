@@ -8,6 +8,7 @@ export const FollowersContext = createContext();
 export const FollowersContextProvider = ({ children }) => {
   const [username, setUsername] = useState('');
   const [followers, setFollowers] = useState([]);
+  const [userId, setUserId] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [isFetched, setIsFetched] = useState(false);
 
@@ -48,6 +49,8 @@ export const FollowersContextProvider = ({ children }) => {
     setUsername,
     followers,
     setFollowers,
+    userId,
+    setUserId,
     getFollowers,
     isLoading,
     isFetched,
