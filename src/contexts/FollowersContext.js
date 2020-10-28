@@ -1,14 +1,14 @@
 import React, { createContext, useState } from 'react';
 import { Alert } from 'react-native';
 
-import fetchFollowers from '../util/api';
+import { fetchFollowers } from '../util/api';
 
 export const FollowersContext = createContext();
 
 export const FollowersContextProvider = ({ children }) => {
   const [username, setUsername] = useState('');
   const [followers, setFollowers] = useState([]);
-  const [userId, setUserId] = useState(0);
+  const [userLogin, setUserLogin] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isFetched, setIsFetched] = useState(false);
 
@@ -49,8 +49,8 @@ export const FollowersContextProvider = ({ children }) => {
     setUsername,
     followers,
     setFollowers,
-    userId,
-    setUserId,
+    userLogin,
+    setUserLogin,
     getFollowers,
     isLoading,
     isFetched,

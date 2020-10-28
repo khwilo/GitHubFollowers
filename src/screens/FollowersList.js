@@ -18,13 +18,13 @@ import truncateText from '../util/truncateText';
 const NUM_OF_COLUMNS = 3;
 const ITEM_HEIGHT = Dimensions.get('window').width / NUM_OF_COLUMNS;
 
-const Item = ({ id, login, avatarUrl, navigation }) => {
-  const { setUserId } = useContext(FollowersContext);
+const Item = ({ login, avatarUrl, navigation }) => {
+  const { setUserLogin } = useContext(FollowersContext);
 
   return (
     <TouchableOpacity
       onPress={() => {
-        setUserId(id);
+        setUserLogin(login);
         navigation.navigate('Profile');
       }}
     >
@@ -46,7 +46,6 @@ const FollowersList = ({ navigation, route }) => {
 
     return (
       <Item
-        id={item.id}
         login={item.login}
         avatarUrl={item.avatar_url}
         navigation={navigation}
