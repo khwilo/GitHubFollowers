@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native';
 import { Entypo, Feather, Ionicons, SimpleLineIcons } from '@expo/vector-icons';
+import { format } from 'date-fns';
 
 import colors from '../constants/colors';
 import { FollowersContext } from '../contexts/FollowersContext';
@@ -122,7 +123,10 @@ const Profile = () => {
         {/* FOOTER */}
         <View style={styles.footer}>
           <Text style={styles.footerText}>
-            {`GitHub since ${user.created_at}`}
+            {`GitHub since ${
+              user.created_at &&
+              format(new Date(user.created_at.split('T')[0]), 'MMM do, yyyy')
+            }`}
           </Text>
         </View>
       </View>
