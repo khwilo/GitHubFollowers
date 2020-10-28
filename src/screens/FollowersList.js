@@ -10,6 +10,7 @@ import {
 
 import NoFollowers from '../components/NoFollowers';
 import colors from '../constants/colors';
+import formatGridData from '../util/formatGridData';
 import truncateText from '../util/truncateText';
 
 const NUM_OF_COLUMNS = 3;
@@ -25,13 +26,15 @@ const Item = ({ login, avatarUrl }) => {
 };
 
 const FollowersList = ({ navigation, route }) => {
-  // TODO: DISPLAY ITEMS IN A GRID LAYOUT
-
   const { followers } = route.params;
 
-  const renderItem = ({ item }) => (
-    <Item login={item.login} avatarUrl={item.avatar_url} />
-  );
+  const renderItem = ({ item }) => {
+    if (item.empty === true) {
+      return <View style={[styles.item, styles.emptyView]} />;
+    }
+
+    return <Item login={item.login} avatarUrl={item.avatar_url} />;
+  };
 
   return (
     <View style={styles.container}>
@@ -39,7 +42,7 @@ const FollowersList = ({ navigation, route }) => {
         <NoFollowers />
       ) : (
         <FlatList
-          data={followers}
+          data={formatGridData(followers, NUM_OF_COLUMNS)}
           renderItem={renderItem}
           keyExtractor={(item) => String(item.id)}
           horizontal={false}
@@ -56,6 +59,7 @@ const styles = StyleSheet.create({
   },
   item: {
     alignItems: 'center',
+    justifyContent: 'center',
     flex: 1,
     margin: 10,
     height: ITEM_HEIGHT,
@@ -69,6 +73,10 @@ const styles = StyleSheet.create({
   textContent: {
     color: colors.black,
     fontWeight: '700',
+    fontSize: 12,
+  },
+  emptyView: {
+    backgroundColor: colors.transparent,
   },
 });
 
