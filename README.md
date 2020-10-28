@@ -15,7 +15,7 @@ This React Native mobile application allows you to:
 ## Tasks
 
 - [x] Fetch user data by making a network call to the GitHub API
-- [ ] Display the followers data in a flat list grid
+- [x] Display the followers data in a flat list grid
 - [x] Customize navigation bar
 - [x] Pass data to various screens on navigation
 - [x] Manage global state using Context API
