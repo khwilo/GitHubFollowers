@@ -18,17 +18,34 @@ const FormInput = ({ actions, navigation }) => {
   const [isDataFetched, setIsDataFetched] = useState(false);
 
   const getFollowers = async () => {
-    setIsDataFetched(false);
     setIsLoading(true);
-    try {
-      await actions.loadFollowers(username);
-      setIsDataFetched(true);
+
+    if (username.length === 0) {
+      Alert.alert(
+        'Empty Username',
+        'Please enter a username. We need to know who to look for 😀.',
+      );
       setIsLoading(false);
-    } catch (error) {
       setIsDataFetched(false);
-      setIsLoading(false);
-      console.log('Loading followers failed', error);
-      Alert.alert('Loading followers failed', error);
+    } else {
+      try {
+        const data = await actions.loadFollowers(username);
+        if (Array.isArray(data)) {
+          setIsDataFetched(true);
+          setIsLoading(false);
+          setUsername('');
+        } else {
+          setIsDataFetched(false);
+          setIsLoading(false);
+          setUsername('');
+          Alert.alert('User not found', 'Try searching for another user 😔.');
+        }
+      } catch (error) {
+        setIsDataFetched(false);
+        setIsLoading(false);
+        setUsername('');
+        Alert.alert('Loading followers failed', error);
+      }
     }
   };
 
