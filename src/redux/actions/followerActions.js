@@ -10,6 +10,7 @@ export const loadFollowers = (username) => {
     try {
       const followers = await fetchFollowers(username);
       dispatch(loadFollowersSuccess(followers));
+      return followers;
     } catch (error) {
       console.log('API CALL ERROR: ', error);
       throw error;
