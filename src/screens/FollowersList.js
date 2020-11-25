@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import {
   Dimensions,
   FlatList,
@@ -8,10 +8,10 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { connect } from 'react-redux';
 
 import NoFollowers from '../components/NoFollowers';
 import colors from '../constants/colors';
-import { FollowersContext } from '../contexts/FollowersContext';
 import formatGridData from '../util/formatGridData';
 import truncateText from '../util/truncateText';
 
@@ -19,12 +19,12 @@ const NUM_OF_COLUMNS = 3;
 const ITEM_HEIGHT = Dimensions.get('window').width / NUM_OF_COLUMNS;
 
 const Item = ({ login, avatarUrl, navigation }) => {
-  const { setUserLogin } = useContext(FollowersContext);
+  // const { setUserLogin } = useContext(FollowersContext);
 
   return (
     <TouchableOpacity
       onPress={() => {
-        setUserLogin(login);
+        // setUserLogin(login);
         navigation.navigate('Profile');
       }}
     >
@@ -36,9 +36,7 @@ const Item = ({ login, avatarUrl, navigation }) => {
   );
 };
 
-const FollowersList = ({ navigation, route }) => {
-  const { followers } = route.params;
-
+const FollowersList = ({ navigation, followers }) => {
   const renderItem = ({ item }) => {
     if (item.empty === true) {
       return <View style={[styles.item, styles.emptyView]} />;
@@ -70,6 +68,12 @@ const FollowersList = ({ navigation, route }) => {
   );
 };
 
+const mapStateToProps = (state) => {
+  return {
+    followers: state.followers,
+  };
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -97,4 +101,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FollowersList;
+export default connect(mapStateToProps)(FollowersList);
