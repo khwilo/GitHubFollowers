@@ -1,5 +1,5 @@
 import { fetchFollowers } from '../../util/api';
-import types from './actionTypes';
+import * as types from './actionTypes';
 
 export const loadFollowersSuccess = (followers) => {
   return { type: types.LOAD_FOLLOWERS_SUCCESS, payload: followers };

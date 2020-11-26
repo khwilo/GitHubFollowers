@@ -1,4 +1,4 @@
-import types from '../actions/actionTypes';
+import * as types from '../actions/actionTypes';
 import initialState from './initialState';
 
 const followerReducer = (state = initialState.followers, action = {}) => {
