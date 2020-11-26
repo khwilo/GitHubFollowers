@@ -12,9 +12,9 @@ import { connect } from 'react-redux';
 
 import NoFollowers from '../components/NoFollowers';
 import colors from '../constants/colors';
+import { FollowersContext } from '../contexts/FollowersContext';
 import formatGridData from '../util/formatGridData';
 import truncateText from '../util/truncateText';
-import { FollowersContext } from '../contexts/FollowersContext';
 
 const NUM_OF_COLUMNS = 3;
 const ITEM_HEIGHT = Dimensions.get('window').width / NUM_OF_COLUMNS;
@@ -37,7 +37,7 @@ const Item = ({ login, avatarUrl, navigation }) => {
   );
 };
 
-const FollowersList = ({ navigation, followers }) => {
+const FollowersList = ({ appUser, followers, navigation }) => {
   const renderItem = ({ item }) => {
     if (item.empty === true) {
       return <View style={[styles.item, styles.emptyView]} />;
@@ -57,13 +57,16 @@ const FollowersList = ({ navigation, followers }) => {
       {followers.length === 0 ? (
         <NoFollowers />
       ) : (
-        <FlatList
-          data={formatGridData(followers, NUM_OF_COLUMNS)}
-          renderItem={renderItem}
-          keyExtractor={(item) => String(item.id)}
-          horizontal={false}
-          numColumns={NUM_OF_COLUMNS}
-        />
+        <>
+          <Text style={styles.appUserName}>{appUser.username}</Text>
+          <FlatList
+            data={formatGridData(followers, NUM_OF_COLUMNS)}
+            renderItem={renderItem}
+            keyExtractor={(item) => String(item.id)}
+            horizontal={false}
+            numColumns={NUM_OF_COLUMNS}
+          />
+        </>
       )}
     </View>
   );
@@ -72,12 +75,20 @@ const FollowersList = ({ navigation, followers }) => {
 const mapStateToProps = (state) => {
   return {
     followers: state.followers,
+    appUser: state.appUser,
   };
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  appUserName: {
+    color: colors.black,
+    fontWeight: '700',
+    fontSize: 28,
+    marginHorizontal: 10,
+    marginVertical: 5,
   },
   item: {
     alignItems: 'center',
