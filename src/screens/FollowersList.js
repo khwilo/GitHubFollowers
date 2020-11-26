@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Dimensions,
   FlatList,
@@ -14,17 +14,18 @@ import NoFollowers from '../components/NoFollowers';
 import colors from '../constants/colors';
 import formatGridData from '../util/formatGridData';
 import truncateText from '../util/truncateText';
+import { FollowersContext } from '../contexts/FollowersContext';
 
 const NUM_OF_COLUMNS = 3;
 const ITEM_HEIGHT = Dimensions.get('window').width / NUM_OF_COLUMNS;
 
 const Item = ({ login, avatarUrl, navigation }) => {
-  // const { setUserLogin } = useContext(FollowersContext);
+  const { setUserLogin } = useContext(FollowersContext);
 
   return (
     <TouchableOpacity
       onPress={() => {
-        // setUserLogin(login);
+        setUserLogin(login);
         navigation.navigate('Profile');
       }}
     >
