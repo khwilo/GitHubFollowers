@@ -1,5 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import React, { useContext, useEffect, useState } from 'react';
+import { Entypo, Feather, Ionicons, SimpleLineIcons } from '@expo/vector-icons';
+import { format } from 'date-fns';
+import React, { useContext, useEffect } from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -7,27 +9,21 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { Entypo, Feather, Ionicons, SimpleLineIcons } from '@expo/vector-icons';
-import { format } from 'date-fns';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import colors from '../constants/colors';
 import { FollowersContext } from '../contexts/FollowersContext';
-import { fetchUser } from '../util/api';
+import * as userActions from '../redux/actions/userActions';
 
-const Profile = () => {
-  const { userLogin } = useContext(FollowersContext);
-  const [user, setUser] = useState({});
-  const [error, setError] = useState('');
-
-  const getUser = () => {
-    fetchUser(userLogin)
-      .then((_user) => setUser(_user))
-      .catch((err) => setError(err));
-  };
+const Profile = ({ actions, user }) => {
+  const { userLogin: username } = useContext(FollowersContext);
 
   useEffect(() => {
-    getUser();
-  });
+    actions.loadUser(username).catch((err) => {
+      console.log(err);
+    });
+  }, []);
 
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
@@ -134,6 +130,20 @@ const Profile = () => {
   );
 };
 
+const mapStateToProps = (state) => {
+  return {
+    user: state.user,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    actions: {
+      loadUser: bindActionCreators(userActions.loadUser, dispatch),
+    },
+  };
+};
+
 const styles = StyleSheet.create({
   scrollViewContent: {
     flexGrow: 1,
@@ -238,4 +248,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Profile;
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);
