@@ -31,6 +31,7 @@ const FormInput = ({ actions, navigation }) => {
       try {
         const data = await actions.loadFollowers(username);
         if (Array.isArray(data)) {
+          actions.createAppUser({ username });
           setIsDataFetched(true);
           setIsLoading(false);
           setUsername('');
