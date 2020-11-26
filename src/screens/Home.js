@@ -11,6 +11,7 @@ import { bindActionCreators } from 'redux';
 
 import Banner from '../components/Banner';
 import FormInput from '../components/FormInput';
+import * as appUserActions from '../redux/actions/appUserActions';
 import * as followerActions from '../redux/actions/followerActions';
 
 const Home = ({ actions, navigation }) => {
@@ -35,6 +36,7 @@ const mapDispatchToProps = (dispatch) => {
         followerActions.loadFollowers,
         dispatch,
       ),
+      createAppUser: bindActionCreators(appUserActions.createAppUser, dispatch),
     },
   };
 };
