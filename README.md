@@ -14,17 +14,17 @@ This React Native mobile application allows you to:
 
 ## Tasks
 
+- [x] Customize navigation bar
 - [x] Fetch user data by making a network call to the GitHub API
 - [x] Display the followers data in a flat list grid
-- [x] Customize navigation bar
-- [x] Pass data to various screens on navigation
-- [x] Manage global state using Context API
-- [ ] Cache images after fetch
-- [ ] Paginate network calls requests
 - [x] Handle empty states
-- [ ] Create custom reusable alerts
-- [ ] Animate user avatars on search
+- [x] Pass data to various screens on navigation
+- [x] Manage global state using Context API & Redux
+- [x] Paginate network calls requests
+- [ ] Cache images after fetch
 - [ ] Implement persistent storage
+- [ ] Animate user avatars on search
+- [ ] Create custom reusable alerts
 
 ## Credit
 
