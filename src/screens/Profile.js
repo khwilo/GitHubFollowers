@@ -17,7 +17,7 @@ import colors from '../constants/colors';
 import { FollowersContext } from '../contexts/FollowersContext';
 import * as userActions from '../redux/actions/userActions';
 
-const Profile = ({ actions, user }) => {
+const Profile = ({ actions, navigation, user }) => {
   const { userLogin: username } = useContext(FollowersContext);
 
   useEffect(() => {
@@ -115,7 +115,16 @@ const Profile = ({ actions, user }) => {
             </View>
           </View>
 
-          <TouchableOpacity style={[styles.btn, styles.btnFollowers]}>
+          <TouchableOpacity
+            style={[styles.btn, styles.btnFollowers]}
+            onPress={
+              () =>
+                navigation.navigate('Followers list', {
+                  username,
+                })
+              // eslint-disable-next-line react/jsx-curly-newline
+            }
+          >
             <Text style={styles.btnText}>Get Followers</Text>
           </TouchableOpacity>
         </View>
