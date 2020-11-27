@@ -3,7 +3,9 @@ import { Entypo, Feather, Ionicons, SimpleLineIcons } from '@expo/vector-icons';
 import { format } from 'date-fns';
 import React, { useContext, useEffect } from 'react';
 import {
+  Alert,
   Image,
+  Linking,
   ScrollView,
   StyleSheet,
   Text,
@@ -16,6 +18,12 @@ import { bindActionCreators } from 'redux';
 import colors from '../constants/colors';
 import { FollowersContext } from '../contexts/FollowersContext';
 import * as userActions from '../redux/actions/userActions';
+
+const openUrl = (url) => {
+  return Linking.openURL(url).catch(() => {
+    Alert.alert('Sorry, something went wrong.', 'Please try again later');
+  });
+};
 
 const Profile = ({ actions, navigation, user }) => {
   const { userLogin: username } = useContext(FollowersContext);
@@ -80,7 +88,10 @@ const Profile = ({ actions, navigation, user }) => {
             </View>
           </View>
 
-          <TouchableOpacity style={[styles.btn, styles.btnProfile]}>
+          <TouchableOpacity
+            style={[styles.btn, styles.btnProfile]}
+            onPress={() => openUrl(`https://github.com/${user.login}`)}
+          >
             <Text style={styles.btnText}>GitHub Profile</Text>
           </TouchableOpacity>
         </View>
