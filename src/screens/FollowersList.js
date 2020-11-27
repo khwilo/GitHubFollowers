@@ -1,5 +1,6 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import {
+  ActivityIndicator,
   Dimensions,
   FlatList,
   Image,
@@ -8,10 +9,14 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
+import { fetchFollowers } from '../api';
 import NoFollowers from '../components/NoFollowers';
 import colors from '../constants/colors';
 import { FollowersContext } from '../contexts/FollowersContext';
+import * as followerActions from '../redux/actions/followerActions';
 import formatGridData from '../util/formatGridData';
 import truncateText from '../util/truncateText';
 
@@ -36,8 +41,10 @@ const Item = ({ login, avatarUrl, navigation }) => {
   );
 };
 
-const FollowersList = ({ navigation, route }) => {
-  const { followers } = route.params;
+const FollowersList = ({ actions, appUser, followers, navigation }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [isListEnd, setIsListEnd] = useState(false);
+  const [page, setPage] = useState(2);
 
   const renderItem = ({ item }) => {
     if (item.empty === true) {
@@ -53,26 +60,96 @@ const FollowersList = ({ navigation, route }) => {
     );
   };
 
+  const renderListFooter = () => (
+    <View style={styles.listFooter}>
+      {isLoading ? (
+        <ActivityIndicator
+          color={colors.green}
+          style={styles.listFooterSpinner}
+        />
+      ) : null}
+    </View>
+  );
+
+  const loadMoreResults = async () => {
+    if (!isLoading && !isListEnd) {
+      setIsLoading(true);
+
+      try {
+        const newFollowers = await fetchFollowers(appUser.username, page);
+
+        if (newFollowers.length === 0) {
+          /*
+           * You have reached the end of the list / there newFollowers' list is empty,
+           * therefore set isListEnd and isLoading values to true to prevent further request
+           */
+          setIsListEnd(true);
+          setIsLoading(false);
+        } else {
+          // process newly fetched followers data
+          setPage(page + 1);
+          // Update the Redux store
+          actions.updateFollowers(newFollowers);
+          // loading is now complete
+          setIsLoading(false);
+        }
+      } catch (error) {
+        console.log('LOADING ERROR: ', error);
+      }
+    }
+  };
+
   return (
     <View style={styles.container}>
       {followers.length === 0 ? (
         <NoFollowers />
       ) : (
-        <FlatList
-          data={formatGridData(followers, NUM_OF_COLUMNS)}
-          renderItem={renderItem}
-          keyExtractor={(item) => String(item.id)}
-          horizontal={false}
-          numColumns={NUM_OF_COLUMNS}
-        />
+        <>
+          <Text style={styles.appUserName}>{appUser.username}</Text>
+          <FlatList
+            data={formatGridData(followers, NUM_OF_COLUMNS)}
+            renderItem={renderItem}
+            ListFooterComponent={renderListFooter}
+            keyExtractor={(item) => String(item.id)}
+            horizontal={false}
+            numColumns={NUM_OF_COLUMNS}
+            onEndReachedThreshold={0.5}
+            onEndReached={loadMoreResults}
+          />
+        </>
       )}
     </View>
   );
 };
 
+const mapStateToProps = (state) => {
+  return {
+    appUser: state.appUser,
+    followers: state.followers,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    actions: {
+      updateFollowers: bindActionCreators(
+        followerActions.updateFollowers,
+        dispatch,
+      ),
+    },
+  };
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  appUserName: {
+    color: colors.black,
+    fontWeight: '700',
+    fontSize: 28,
+    marginHorizontal: 10,
+    marginVertical: 5,
   },
   item: {
     alignItems: 'center',
@@ -95,6 +172,15 @@ const styles = StyleSheet.create({
   emptyView: {
     backgroundColor: colors.transparent,
   },
+  listFooter: {
+    padding: 5,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  listFooterSpinner: {
+    margin: 5,
+  },
 });
 
-export default FollowersList;
+export default connect(mapStateToProps, mapDispatchToProps)(FollowersList);
