@@ -5,6 +5,10 @@ export const loadFollowersSuccess = (followers) => {
   return { type: types.LOAD_FOLLOWERS_SUCCESS, payload: followers };
 };
 
+export const updateFollowers = (followers) => {
+  return { type: types.UPDATE_FOLLOWERS_SUCCESS, payload: followers };
+};
+
 export const loadFollowers = (username) => {
   return async (dispatch) => {
     try {
