@@ -3,6 +3,7 @@ import { Entypo, Feather, Ionicons, SimpleLineIcons } from '@expo/vector-icons';
 import { format } from 'date-fns';
 import React, { useContext, useEffect } from 'react';
 import {
+  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -30,7 +31,10 @@ const Profile = ({ actions, user }) => {
       <View style={styles.container}>
         {/* PROFILE */}
         <View style={styles.profile}>
-          <View style={styles.profileImagePlaceholder} />
+          <Image
+            source={{ uri: `${user.avatar_url}` }}
+            style={styles.profileImage}
+          />
           <View style={styles.profileDetails}>
             <Text style={styles.profileLogin}>{user.login}</Text>
             <Text style={styles.profileText}>{user.name}</Text>
@@ -151,14 +155,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingVertical: 15,
-    paddingHorizontal: 30,
+    paddingHorizontal: 20,
     backgroundColor: colors.white,
   },
   profile: {
     flexDirection: 'row',
     marginBottom: 15,
   },
-  profileImagePlaceholder: {
+  profileImage: {
     width: 120,
     height: 120,
     borderRadius: 10,
