@@ -1,8 +1,8 @@
 /*
  * GitHub user actions
  */
+import { fetchUser } from '../../api';
 import * as types from './actionTypes';
-import { fetchUser } from '../../util/api';
 
 export const loadUserSuccess = (user) => {
   return { type: types.LOAD_USER_SUCCESS, payload: user };

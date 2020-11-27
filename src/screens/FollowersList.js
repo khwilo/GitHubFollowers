@@ -12,11 +12,11 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import { fetchFollowers } from '../api';
 import NoFollowers from '../components/NoFollowers';
 import colors from '../constants/colors';
 import { FollowersContext } from '../contexts/FollowersContext';
 import * as followerActions from '../redux/actions/followerActions';
-import { fetchFollowers } from '../util/api';
 import formatGridData from '../util/formatGridData';
 import truncateText from '../util/truncateText';
 
