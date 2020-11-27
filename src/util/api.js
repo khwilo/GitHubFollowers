@@ -1,9 +1,9 @@
 // TODO: Paginate network requests
 
-export const fetchFollowers = async (username) => {
+export const fetchFollowers = async (username, page) => {
   try {
     const response = await fetch(
-      `https://api.github.com/users/${username}/followers`,
+      `https://api.github.com/users/${username}/followers?page=${page}`,
     );
     const data = await response.json();
     return data;
