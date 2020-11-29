@@ -58,6 +58,9 @@ const FollowersList = ({ actions, appUser, followers, navigation, route }) => {
   useEffect(() => {
     if (profileUserName.length > 0) {
       setIsNewFollowersLoading(true);
+      setIsLoading(false);
+      setIsListEnd(false);
+      setPage(2);
       actions
         .loadFollowers(profileUserName)
         .then(() => setIsNewFollowersLoading(false))
@@ -98,7 +101,10 @@ const FollowersList = ({ actions, appUser, followers, navigation, route }) => {
       setIsLoading(true);
 
       try {
-        const newFollowers = await fetchFollowers(appUser.username, page);
+        const newFollowers =
+          profileUserName.length > 0
+            ? await fetchFollowers(profileUserName, page)
+            : await fetchFollowers(appUser.username, page);
 
         if (newFollowers.length === 0) {
           /*
