@@ -3,6 +3,9 @@ import { Entypo, Feather, Ionicons, SimpleLineIcons } from '@expo/vector-icons';
 import { format } from 'date-fns';
 import React, { useContext, useEffect } from 'react';
 import {
+  Alert,
+  Image,
+  Linking,
   ScrollView,
   StyleSheet,
   Text,
@@ -16,7 +19,13 @@ import colors from '../constants/colors';
 import { FollowersContext } from '../contexts/FollowersContext';
 import * as userActions from '../redux/actions/userActions';
 
-const Profile = ({ actions, user }) => {
+const openUrl = (url) => {
+  return Linking.openURL(url).catch(() => {
+    Alert.alert('Sorry, something went wrong.', 'Please try again later');
+  });
+};
+
+const Profile = ({ actions, navigation, user }) => {
   const { userLogin: username } = useContext(FollowersContext);
 
   useEffect(() => {
@@ -30,7 +39,10 @@ const Profile = ({ actions, user }) => {
       <View style={styles.container}>
         {/* PROFILE */}
         <View style={styles.profile}>
-          <View style={styles.profileImagePlaceholder} />
+          <Image
+            source={{ uri: `${user.avatar_url}` }}
+            style={styles.profileImage}
+          />
           <View style={styles.profileDetails}>
             <Text style={styles.profileLogin}>{user.login}</Text>
             <Text style={styles.profileText}>{user.name}</Text>
@@ -76,7 +88,10 @@ const Profile = ({ actions, user }) => {
             </View>
           </View>
 
-          <TouchableOpacity style={[styles.btn, styles.btnProfile]}>
+          <TouchableOpacity
+            style={[styles.btn, styles.btnProfile]}
+            onPress={() => openUrl(`https://github.com/${user.login}`)}
+          >
             <Text style={styles.btnText}>GitHub Profile</Text>
           </TouchableOpacity>
         </View>
@@ -111,7 +126,16 @@ const Profile = ({ actions, user }) => {
             </View>
           </View>
 
-          <TouchableOpacity style={[styles.btn, styles.btnFollowers]}>
+          <TouchableOpacity
+            style={[styles.btn, styles.btnFollowers]}
+            onPress={
+              () =>
+                navigation.navigate('Followers list', {
+                  username,
+                })
+              // eslint-disable-next-line react/jsx-curly-newline
+            }
+          >
             <Text style={styles.btnText}>Get Followers</Text>
           </TouchableOpacity>
         </View>
@@ -151,14 +175,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingVertical: 15,
-    paddingHorizontal: 30,
+    paddingHorizontal: 20,
     backgroundColor: colors.white,
   },
   profile: {
     flexDirection: 'row',
     marginBottom: 15,
   },
-  profileImagePlaceholder: {
+  profileImage: {
     width: 120,
     height: 120,
     borderRadius: 10,

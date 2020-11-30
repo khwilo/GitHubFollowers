@@ -1,5 +1,3 @@
-// TODO: Paginate network requests
-
 export const fetchFollowers = async (username, page = 1) => {
   try {
     const response = await fetch(

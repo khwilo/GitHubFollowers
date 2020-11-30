@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Dimensions,
@@ -41,10 +41,35 @@ const Item = ({ login, avatarUrl, navigation }) => {
   );
 };
 
-const FollowersList = ({ actions, appUser, followers, navigation }) => {
+const FollowersList = ({ actions, appUser, followers, navigation, route }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isListEnd, setIsListEnd] = useState(false);
   const [page, setPage] = useState(2);
+  const [profileUserName, setProfileUserName] = useState('');
+  const [isNewFollowersLoading, setIsNewFollowersLoading] = useState(false);
+
+  useEffect(() => {
+    if (route.params) {
+      const { username } = route.params;
+      setProfileUserName(username);
+    }
+  }, [route]);
+
+  useEffect(() => {
+    if (profileUserName.length > 0) {
+      setIsNewFollowersLoading(true);
+      setIsLoading(false);
+      setIsListEnd(false);
+      setPage(2);
+      actions
+        .loadFollowers(profileUserName)
+        .then(() => setIsNewFollowersLoading(false))
+        .catch((error) => {
+          setIsNewFollowersLoading(false);
+          console.log(error);
+        });
+    }
+  }, [profileUserName, actions]);
 
   const renderItem = ({ item }) => {
     if (item.empty === true) {
@@ -76,7 +101,10 @@ const FollowersList = ({ actions, appUser, followers, navigation }) => {
       setIsLoading(true);
 
       try {
-        const newFollowers = await fetchFollowers(appUser.username, page);
+        const newFollowers =
+          profileUserName.length > 0
+            ? await fetchFollowers(profileUserName, page)
+            : await fetchFollowers(appUser.username, page);
 
         if (newFollowers.length === 0) {
           /*
@@ -105,17 +133,29 @@ const FollowersList = ({ actions, appUser, followers, navigation }) => {
         <NoFollowers />
       ) : (
         <>
-          <Text style={styles.appUserName}>{appUser.username}</Text>
-          <FlatList
-            data={formatGridData(followers, NUM_OF_COLUMNS)}
-            renderItem={renderItem}
-            ListFooterComponent={renderListFooter}
-            keyExtractor={(item) => String(item.id)}
-            horizontal={false}
-            numColumns={NUM_OF_COLUMNS}
-            onEndReachedThreshold={0.5}
-            onEndReached={loadMoreResults}
-          />
+          {isNewFollowersLoading ? (
+            <View style={styles.screenSpinnerContainer}>
+              <ActivityIndicator color={colors.green} size="large" />
+            </View>
+          ) : (
+            <>
+              <Text style={styles.appUserName}>
+                {profileUserName.length > 0
+                  ? profileUserName
+                  : appUser.username}
+              </Text>
+              <FlatList
+                data={formatGridData(followers, NUM_OF_COLUMNS)}
+                renderItem={renderItem}
+                ListFooterComponent={renderListFooter}
+                keyExtractor={(item) => String(item.id)}
+                horizontal={false}
+                numColumns={NUM_OF_COLUMNS}
+                onEndReachedThreshold={0.5}
+                onEndReached={loadMoreResults}
+              />
+            </>
+          )}
         </>
       )}
     </View>
@@ -132,6 +172,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     actions: {
+      loadFollowers: bindActionCreators(
+        followerActions.loadFollowers,
+        dispatch,
+      ),
       updateFollowers: bindActionCreators(
         followerActions.updateFollowers,
         dispatch,
@@ -180,6 +224,11 @@ const styles = StyleSheet.create({
   },
   listFooterSpinner: {
     margin: 5,
+  },
+  screenSpinnerContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
   },
 });
 
