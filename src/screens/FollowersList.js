@@ -139,6 +139,7 @@ const FollowersList = ({ actions, appUser, followers, navigation, route }) => {
             </View>
           ) : (
             <>
+              {/* TODO: Implement search */}
               <Text style={styles.appUserName}>
                 {profileUserName.length > 0
                   ? profileUserName
