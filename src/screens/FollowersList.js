@@ -24,13 +24,14 @@ import truncateText from '../util/truncateText';
 const NUM_OF_COLUMNS = 3;
 const ITEM_HEIGHT = Dimensions.get('window').width / NUM_OF_COLUMNS;
 
-const Item = ({ login, avatarUrl, navigation }) => {
+const Item = ({ login, avatarUrl, navigation, clearSearch }) => {
   const { setUserLogin } = useContext(FollowersContext);
 
   return (
     <TouchableOpacity
       onPress={() => {
         setUserLogin(login);
+        clearSearch();
         navigation.navigate('Profile');
       }}
     >
@@ -49,14 +50,22 @@ const FollowersList = ({ actions, appUser, followers, navigation, route }) => {
   const [profileUserName, setProfileUserName] = useState('');
   const [isNewFollowersLoading, setIsNewFollowersLoading] = useState(false);
   const [searchInput, setSearchInput] = useState('');
+  const [followersList, setFollowersList] = useState(followers);
 
-  const followersList =
-    searchInput.length > 0
-      ? followers.filter(
-          (follower) =>
-            follower.login.toLowerCase() === searchInput.toLowerCase(),
-        )
-      : followers;
+  useEffect(() => {
+    if (searchInput.length > 0) {
+      const newList = followers.filter((follower) => {
+        const loginName = follower.login
+          ? follower.login.toLowerCase()
+          : ''.toLowerCase();
+        const searchValue = searchInput.toLowerCase();
+        return loginName === searchValue;
+      });
+      setFollowersList(newList);
+    } else {
+      setFollowersList(followers);
+    }
+  }, [followers, searchInput]);
 
   useEffect(() => {
     if (route.params) {
@@ -81,6 +90,10 @@ const FollowersList = ({ actions, appUser, followers, navigation, route }) => {
     }
   }, [profileUserName, actions]);
 
+  const clearSearchInput = () => {
+    setSearchInput('');
+  };
+
   const renderItem = ({ item }) => {
     if (item.empty === true) {
       return <View style={[styles.item, styles.emptyView]} />;
@@ -90,6 +103,7 @@ const FollowersList = ({ actions, appUser, followers, navigation, route }) => {
       <Item
         login={item.login}
         avatarUrl={item.avatar_url}
+        clearSearch={clearSearchInput}
         navigation={navigation}
       />
     );
