@@ -52,15 +52,19 @@ const FollowersList = ({ actions, appUser, followers, navigation, route }) => {
   const [searchInput, setSearchInput] = useState('');
   const [followersList, setFollowersList] = useState(followers);
 
+  const filterFollowers = (list, query) => {
+    const result = list.filter(({ login }) => {
+      const loginName = login ? login.toLowerCase() : ''.toLowerCase();
+      const searchValue = query.toLowerCase();
+      return loginName === searchValue;
+    });
+
+    return result;
+  };
+
   useEffect(() => {
     if (searchInput.length > 0) {
-      const newList = followers.filter((follower) => {
-        const loginName = follower.login
-          ? follower.login.toLowerCase()
-          : ''.toLowerCase();
-        const searchValue = searchInput.toLowerCase();
-        return loginName === searchValue;
-      });
+      const newList = filterFollowers(followers, searchInput);
       setFollowersList(newList);
     } else {
       setFollowersList(followers);
