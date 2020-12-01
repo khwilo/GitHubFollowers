@@ -6,6 +6,7 @@ import {
   Image,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -47,6 +48,15 @@ const FollowersList = ({ actions, appUser, followers, navigation, route }) => {
   const [page, setPage] = useState(2);
   const [profileUserName, setProfileUserName] = useState('');
   const [isNewFollowersLoading, setIsNewFollowersLoading] = useState(false);
+  const [searchInput, setSearchInput] = useState('');
+
+  const followersList =
+    searchInput.length > 0
+      ? followers.filter(
+          (follower) =>
+            follower.login.toLowerCase() === searchInput.toLowerCase(),
+        )
+      : followers;
 
   useEffect(() => {
     if (route.params) {
@@ -139,14 +149,21 @@ const FollowersList = ({ actions, appUser, followers, navigation, route }) => {
             </View>
           ) : (
             <>
-              {/* TODO: Implement search */}
               <Text style={styles.appUserName}>
                 {profileUserName.length > 0
                   ? profileUserName
                   : appUser.username}
               </Text>
+              <View style={styles.searchInputWrapper}>
+                <TextInput
+                  style={styles.searchInput}
+                  onChangeText={(value) => setSearchInput(value)}
+                  placeholder="Search for a username"
+                  placeholderTextColor={colors.white}
+                />
+              </View>
               <FlatList
-                data={formatGridData(followers, NUM_OF_COLUMNS)}
+                data={formatGridData(followersList, NUM_OF_COLUMNS)}
                 renderItem={renderItem}
                 ListFooterComponent={renderListFooter}
                 keyExtractor={(item) => String(item.id)}
@@ -188,6 +205,17 @@ const mapDispatchToProps = (dispatch) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  searchInputWrapper: {
+    marginHorizontal: 10,
+    marginBottom: 10,
+  },
+  searchInput: {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    backgroundColor: colors.gray,
+    color: colors.white,
+    borderRadius: 10,
   },
   appUserName: {
     color: colors.black,
