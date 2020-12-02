@@ -51,7 +51,7 @@ const FollowersList = ({ actions, appUser, followers, navigation, route }) => {
   const [isNewFollowersLoading, setIsNewFollowersLoading] = useState(false);
   const [searchInput, setSearchInput] = useState('');
   const [followersList, setFollowersList] = useState(followers);
-  const [lastPage, setLastPage] = useState(0);
+  const [filterList, setFilterList] = useState([]);
 
   const filterFollowers = (list, query) => {
     const result = list.filter(({ login }) => {
@@ -63,33 +63,52 @@ const FollowersList = ({ actions, appUser, followers, navigation, route }) => {
     return result;
   };
 
+  const getAllFollowers = async (lastPage) => {
+    try {
+      const results = [];
+      const username =
+        profileUserName.length > 0 ? profileUserName : appUser.username;
+      for (let i = 1; i <= lastPage; i += 1) {
+        results.push(fetchFollowers(username, i));
+      }
+      return await Promise.all(results);
+    } catch (error) {
+      console.log('[FETCHING ALL USERS] ERROR: ', error);
+    }
+    return null;
+  };
+
   useEffect(() => {
     const username =
       profileUserName.length > 0 ? profileUserName : appUser.username;
     fetch(`https://api.github.com/users/${username}/followers`).then(
       (response) => {
         const { headers } = response;
-        const endOfList = headers
-          .get('link')
-          .split(',')[1]
-          .split(';')[0]
-          .split('?')[1]
-          .substring(5)
-          .slice(0, -1);
-        setLastPage(endOfList);
-        console.log('LAST PAGE IS: ', endOfList);
+        const endOfList = headers.get('link')
+          ? headers
+              .get('link')
+              .split(',')[1]
+              .split(';')[0]
+              .split('?')[1]
+              .substring(5)
+              .slice(0, -1)
+          : 1;
+        getAllFollowers(endOfList).then((data) => {
+          const allFollowers = [].concat(...data);
+          setFilterList(allFollowers);
+        });
       },
     );
   }, [appUser, profileUserName]);
 
   useEffect(() => {
     if (searchInput.length > 0) {
-      const newList = filterFollowers(followers, searchInput);
+      const newList = filterFollowers(filterList, searchInput);
       setFollowersList(newList);
     } else {
       setFollowersList(followers);
     }
-  }, [followers, searchInput]);
+  }, [followers, searchInput, filterList]);
 
   useEffect(() => {
     if (route.params) {
