@@ -51,6 +51,7 @@ const FollowersList = ({ actions, appUser, followers, navigation, route }) => {
   const [isNewFollowersLoading, setIsNewFollowersLoading] = useState(false);
   const [searchInput, setSearchInput] = useState('');
   const [followersList, setFollowersList] = useState(followers);
+  const [lastPage, setLastPage] = useState(0);
 
   const filterFollowers = (list, query) => {
     const result = list.filter(({ login }) => {
@@ -61,6 +62,25 @@ const FollowersList = ({ actions, appUser, followers, navigation, route }) => {
 
     return result;
   };
+
+  useEffect(() => {
+    const username =
+      profileUserName.length > 0 ? profileUserName : appUser.username;
+    fetch(`https://api.github.com/users/${username}/followers`).then(
+      (response) => {
+        const { headers } = response;
+        const endOfList = headers
+          .get('link')
+          .split(',')[1]
+          .split(';')[0]
+          .split('?')[1]
+          .substring(5)
+          .slice(0, -1);
+        setLastPage(endOfList);
+        console.log('LAST PAGE IS: ', endOfList);
+      },
+    );
+  }, [appUser, profileUserName]);
 
   useEffect(() => {
     if (searchInput.length > 0) {
