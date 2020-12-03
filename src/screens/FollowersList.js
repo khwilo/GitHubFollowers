@@ -181,15 +181,18 @@ const FollowersList = ({ actions, appUser, followers, navigation, route }) => {
                 <Ionicons name="ios-search" size={24} color={colors.darkGray} />
                 <TextInput
                   style={styles.searchInput}
+                  value={searchInput}
                   onChangeText={(value) => setSearchInput(value)}
                   placeholder="Search for a username"
                   placeholderTextColor={colors.darkGray}
                 />
-                <MaterialIcons
-                  name="cancel"
-                  size={24}
-                  color={colors.darkGray}
-                />
+                <TouchableOpacity onPress={clearSearchInput}>
+                  <MaterialIcons
+                    name="cancel"
+                    size={24}
+                    color={colors.darkGray}
+                  />
+                </TouchableOpacity>
               </View>
               <FlatList
                 data={formatGridData(followersList, NUM_OF_COLUMNS)}
