@@ -13,13 +13,12 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { fetchFollowers } from '../api';
+import { fetchFollowers, getLastPage } from '../api';
 import NoFollowers from '../components/NoFollowers';
 import colors from '../constants/colors';
 import { FollowersContext } from '../contexts/FollowersContext';
 import * as followerActions from '../redux/actions/followerActions';
-import formatGridData from '../util/formatGridData';
-import truncateText from '../util/truncateText';
+import { followersUtil, formatGridData, truncateText } from '../util';
 
 const NUM_OF_COLUMNS = 3;
 const ITEM_HEIGHT = Dimensions.get('window').width / NUM_OF_COLUMNS;
@@ -37,7 +36,9 @@ const Item = ({ login, avatarUrl, navigation, clearSearch }) => {
     >
       <View style={styles.item}>
         <Image style={styles.image} source={{ uri: avatarUrl }} />
-        <Text style={styles.textContent}>{truncateText(login)}</Text>
+        <Text style={styles.textContent}>
+          {login ? truncateText(login) : ''}
+        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -52,63 +53,6 @@ const FollowersList = ({ actions, appUser, followers, navigation, route }) => {
   const [searchInput, setSearchInput] = useState('');
   const [followersList, setFollowersList] = useState(followers);
   const [filterList, setFilterList] = useState([]);
-
-  const filterFollowers = (list, query) => {
-    const result = list.filter(({ login }) => {
-      const loginName = login ? login.toLowerCase() : ''.toLowerCase();
-      const searchValue = query.toLowerCase();
-      return loginName === searchValue;
-    });
-
-    return result;
-  };
-
-  const getAllFollowers = async (lastPage) => {
-    try {
-      const results = [];
-      const username =
-        profileUserName.length > 0 ? profileUserName : appUser.username;
-      for (let i = 1; i <= lastPage; i += 1) {
-        results.push(fetchFollowers(username, i));
-      }
-      return await Promise.all(results);
-    } catch (error) {
-      console.log('[FETCHING ALL USERS] ERROR: ', error);
-    }
-    return null;
-  };
-
-  useEffect(() => {
-    const username =
-      profileUserName.length > 0 ? profileUserName : appUser.username;
-    fetch(`https://api.github.com/users/${username}/followers`).then(
-      (response) => {
-        const { headers } = response;
-        const endOfList = headers.get('link')
-          ? headers
-              .get('link')
-              .split(',')[1]
-              .split(';')[0]
-              .split('?')[1]
-              .substring(5)
-              .slice(0, -1)
-          : 1;
-        getAllFollowers(endOfList).then((data) => {
-          const allFollowers = [].concat(...data);
-          setFilterList(allFollowers);
-        });
-      },
-    );
-  }, [appUser, profileUserName]);
-
-  useEffect(() => {
-    if (searchInput.length > 0) {
-      const newList = filterFollowers(filterList, searchInput);
-      setFollowersList(newList);
-    } else {
-      setFollowersList(followers);
-    }
-  }, [followers, searchInput, filterList]);
 
   useEffect(() => {
     if (route.params) {
@@ -132,6 +76,26 @@ const FollowersList = ({ actions, appUser, followers, navigation, route }) => {
         });
     }
   }, [profileUserName, actions]);
+
+  useEffect(() => {
+    const username =
+      profileUserName.length > 0 ? profileUserName : appUser.username;
+    getLastPage(username).then((lastPage) => {
+      followersUtil.getAll(username, lastPage).then((data) => {
+        const allFollowers = [].concat(...data);
+        setFilterList(allFollowers);
+      });
+    });
+  }, [appUser, profileUserName]);
+
+  useEffect(() => {
+    if (searchInput.length > 0) {
+      const newList = followersUtil.filter(filterList, searchInput);
+      setFollowersList(newList);
+    } else {
+      setFollowersList(followers);
+    }
+  }, [followers, searchInput, filterList]);
 
   const clearSearchInput = () => {
     setSearchInput('');
