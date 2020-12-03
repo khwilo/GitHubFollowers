@@ -1,3 +1,5 @@
+/* eslint-disable import/no-extraneous-dependencies */
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import React, { useContext, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
@@ -176,11 +178,17 @@ const FollowersList = ({ actions, appUser, followers, navigation, route }) => {
                   : appUser.username}
               </Text>
               <View style={styles.searchInputWrapper}>
+                <Ionicons name="ios-search" size={24} color={colors.darkGray} />
                 <TextInput
                   style={styles.searchInput}
                   onChangeText={(value) => setSearchInput(value)}
                   placeholder="Search for a username"
-                  placeholderTextColor={colors.white}
+                  placeholderTextColor={colors.darkGray}
+                />
+                <MaterialIcons
+                  name="cancel"
+                  size={24}
+                  color={colors.darkGray}
                 />
               </View>
               <FlatList
@@ -230,13 +238,18 @@ const styles = StyleSheet.create({
   searchInputWrapper: {
     marginHorizontal: 10,
     marginBottom: 10,
+    paddingHorizontal: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.lightGray,
+    borderRadius: 10,
   },
   searchInput: {
+    flex: 1,
     paddingVertical: 5,
     paddingHorizontal: 10,
-    backgroundColor: colors.gray,
-    color: colors.white,
-    borderRadius: 10,
+    color: colors.black,
+    fontSize: 16,
   },
   appUserName: {
     color: colors.black,
