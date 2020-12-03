@@ -55,7 +55,9 @@ const Profile = ({ actions, navigation, user }) => {
 
         {/* BIO */}
         <View style={styles.bio}>
-          <Text style={styles.bioDetails}>{user.bio}</Text>
+          <Text style={styles.bioDetails}>
+            {user.bio ? user.bio.trim() : ''}
+          </Text>
         </View>
 
         {/* Repos and Gists */}
@@ -211,7 +213,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   bioDetails: {
-    color: colors.gray,
+    color: colors.black,
     fontSize: 16,
   },
   card: {
