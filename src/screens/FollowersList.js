@@ -6,10 +6,12 @@ import {
   Dimensions,
   FlatList,
   Image,
+  Keyboard,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import { connect } from 'react-redux';
@@ -55,6 +57,7 @@ const FollowersList = ({ actions, appUser, followers, navigation, route }) => {
   const [searchInput, setSearchInput] = useState('');
   const [followersList, setFollowersList] = useState(followers);
   const [filterList, setFilterList] = useState([]);
+  const [isTextInFocus, setTextInFocus] = useState(false);
 
   useEffect(() => {
     if (route.params) {
@@ -172,27 +175,35 @@ const FollowersList = ({ actions, appUser, followers, navigation, route }) => {
             </View>
           ) : (
             <>
-              <Text style={styles.appUserName}>
-                {profileUserName.length > 0
-                  ? profileUserName
-                  : appUser.username}
-              </Text>
+              <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <View>
+                  <Text style={styles.appUserName}>
+                    {profileUserName.length > 0
+                      ? profileUserName
+                      : appUser.username}
+                  </Text>
+                </View>
+              </TouchableWithoutFeedback>
               <View style={styles.searchInputWrapper}>
                 <Ionicons name="ios-search" size={24} color={colors.darkGray} />
                 <TextInput
                   style={styles.searchInput}
                   value={searchInput}
                   onChangeText={(value) => setSearchInput(value)}
+                  onFocus={() => setTextInFocus(true)}
+                  onBlur={() => setTextInFocus(false)}
                   placeholder="Search for a username"
                   placeholderTextColor={colors.darkGray}
                 />
-                <TouchableOpacity onPress={clearSearchInput}>
-                  <MaterialIcons
-                    name="cancel"
-                    size={24}
-                    color={colors.darkGray}
-                  />
-                </TouchableOpacity>
+                {isTextInFocus ? (
+                  <TouchableOpacity onPress={clearSearchInput}>
+                    <MaterialIcons
+                      name="cancel"
+                      size={24}
+                      color={colors.darkGray}
+                    />
+                  </TouchableOpacity>
+                ) : null}
               </View>
               <FlatList
                 data={formatGridData(followersList, NUM_OF_COLUMNS)}
@@ -237,6 +248,7 @@ const mapDispatchToProps = (dispatch) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: colors.white,
   },
   searchInputWrapper: {
     marginHorizontal: 10,
@@ -260,6 +272,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     marginHorizontal: 10,
     marginVertical: 5,
+    paddingVertical: 5,
   },
   item: {
     alignItems: 'center',
