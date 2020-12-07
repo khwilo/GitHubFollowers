@@ -17,6 +17,7 @@ import { bindActionCreators } from 'redux';
 
 import colors from '../constants/colors';
 import { FollowersContext } from '../contexts/FollowersContext';
+import addFollowerToFavorites from '../redux/actions/favoriteActions';
 import * as userActions from '../redux/actions/userActions';
 
 const openUrl = (url) => {
@@ -142,6 +143,16 @@ const Profile = ({ actions, navigation, user }) => {
           </TouchableOpacity>
         </View>
 
+        <View style={styles.favoritesWrapper}>
+          <TouchableOpacity
+            onPress={() => {
+              actions.addToFavorites(user);
+            }}
+          >
+            <Entypo name="heart" size={24} color="gray" />
+          </TouchableOpacity>
+        </View>
+
         {/* FOOTER */}
         <View style={styles.footer}>
           <Text style={styles.footerText}>
@@ -166,6 +177,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     actions: {
       loadUser: bindActionCreators(userActions.loadUser, dispatch),
+      addToFavorites: bindActionCreators(addFollowerToFavorites, dispatch),
     },
   };
 };
@@ -263,6 +275,10 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontSize: 16,
     fontWeight: '700',
+  },
+  favoritesWrapper: {
+    alignItems: 'center',
+    padding: 5,
   },
   footer: {
     marginTop: 5,
