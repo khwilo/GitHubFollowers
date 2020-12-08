@@ -17,6 +17,7 @@ import { FollowersContext } from '../contexts/FollowersContext';
 
 const Favorites = ({ favorites, navigation }) => {
   const { setUserLogin } = useContext(FollowersContext);
+  const noFavoritesText = 'You have not added a favorite follower 😟.';
 
   const renderItem = ({ item }) => {
     return (
@@ -44,12 +45,24 @@ const Favorites = ({ favorites, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={favorites}
-        renderItem={renderItem}
-        keyExtractor={(item) => String(item.id)}
-        ItemSeparatorComponent={() => <RowSeparator />}
-      />
+      {favorites.length === 0 ? (
+        <View style={styles.noFavoritesWrapper}>
+          <Text style={styles.noFavoritesText}>{noFavoritesText}</Text>
+          <TouchableOpacity
+            style={styles.searchIconWrapper}
+            onPress={() => navigation.navigate('Search')}
+          >
+            <AntDesign name="search1" size={30} color={colors.green} />
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <FlatList
+          data={favorites}
+          renderItem={renderItem}
+          keyExtractor={(item) => String(item.id)}
+          ItemSeparatorComponent={() => <RowSeparator />}
+        />
+      )}
     </View>
   );
 };
@@ -64,6 +77,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
+  },
+  noFavoritesWrapper: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  noFavoritesText: {
+    color: colors.gray,
+    fontSize: 28,
+    fontWeight: '700',
+    textAlign: 'center',
+  },
+  searchIconWrapper: {
+    marginVertical: 20,
   },
   favoriteViewWrapper: {
     flexDirection: 'row',
