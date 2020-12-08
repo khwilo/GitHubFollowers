@@ -3,8 +3,10 @@
  */
 import * as types from './actionTypes';
 
-const addUserToFavorites = (user) => {
-  return { type: types.ADD_USER_TO_FAVORITES_SUCCESS, payload: user };
+export const addToFavorites = (user) => {
+  return { type: types.ADD_TO_FAVORITES_SUCCESS, payload: user };
 };
 
-export default addUserToFavorites;
+export const removeFromFavorites = (user) => {
+  return { type: types.REMOVE_FROM_FAVORITES_SUCCESS, payload: user };
+};

@@ -17,7 +17,7 @@ import { bindActionCreators } from 'redux';
 
 import colors from '../constants/colors';
 import { FollowersContext } from '../contexts/FollowersContext';
-import addFollowerToFavorites from '../redux/actions/favoriteActions';
+import * as favoriteActions from '../redux/actions/favoriteActions';
 import * as userActions from '../redux/actions/userActions';
 
 const openUrl = (url) => {
@@ -41,15 +41,19 @@ const Profile = ({ actions, navigation, favorites, user }) => {
     setIsFavorite(result);
   }, [favorites, user]);
 
-  const handleAddFavorites = () => {
+  const handleManipulateFavorites = () => {
     if (isFavorite) {
-      Alert.alert('Duplicate', 'This follower is already in your favorites.');
+      actions.removeFromFavorites(user);
+      Alert.alert(
+        'Success',
+        'You have successfully removed this user from your favorites.',
+      );
     } else {
+      actions.addToFavorites(user);
       Alert.alert(
         'Success',
         'You have successfully added this user to your favorites 🎉',
       );
-      actions.addToFavorites(user);
     }
   };
 
@@ -162,7 +166,7 @@ const Profile = ({ actions, navigation, favorites, user }) => {
         </View>
 
         <View style={styles.favoritesWrapper}>
-          <TouchableOpacity onPress={handleAddFavorites}>
+          <TouchableOpacity onPress={handleManipulateFavorites}>
             <Entypo
               name="heart"
               size={24}
@@ -170,9 +174,7 @@ const Profile = ({ actions, navigation, favorites, user }) => {
             />
           </TouchableOpacity>
           <Text style={styles.favoriteLabel}>
-            {`${
-              isFavorite ? 'Follower already in favorites!' : 'Add to Favorites'
-            }`}
+            {`${isFavorite ? 'Remove from favorites' : 'Add to Favorites'}`}
           </Text>
         </View>
 
@@ -201,7 +203,14 @@ const mapDispatchToProps = (dispatch) => {
   return {
     actions: {
       loadUser: bindActionCreators(userActions.loadUser, dispatch),
-      addToFavorites: bindActionCreators(addFollowerToFavorites, dispatch),
+      addToFavorites: bindActionCreators(
+        favoriteActions.addToFavorites,
+        dispatch,
+      ),
+      removeFromFavorites: bindActionCreators(
+        favoriteActions.removeFromFavorites,
+        dispatch,
+      ),
     },
   };
 };
