@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { AntDesign } from '@expo/vector-icons';
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   FlatList,
   Image,
@@ -13,8 +13,11 @@ import { connect } from 'react-redux';
 
 import RowSeparator from '../components/RowSeparator';
 import colors from '../constants/colors';
+import { FollowersContext } from '../contexts/FollowersContext';
 
-const Favorites = ({ favorites }) => {
+const Favorites = ({ favorites, navigation }) => {
+  const { setUserLogin } = useContext(FollowersContext);
+
   const renderItem = ({ item }) => {
     return (
       <View style={styles.favoriteViewWrapper}>
@@ -26,7 +29,12 @@ const Favorites = ({ favorites }) => {
           <Text style={styles.followerLogin}>{item.login}</Text>
         </View>
         <View style={styles.rightIconWrapper}>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              setUserLogin(item.login);
+              navigation.navigate('Profile');
+            }}
+          >
             <AntDesign name="right" size={24} color="black" />
           </TouchableOpacity>
         </View>
