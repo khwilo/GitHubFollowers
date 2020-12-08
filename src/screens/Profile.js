@@ -38,7 +38,6 @@ const Profile = ({ actions, navigation, favorites, user }) => {
 
   useEffect(() => {
     const result = favorites.some((favorite) => favorite.id === user.id);
-    console.log('IS FAVORITE: ', result);
     setIsFavorite(result);
   }, [favorites, user]);
 
@@ -167,7 +166,7 @@ const Profile = ({ actions, navigation, favorites, user }) => {
             <Entypo
               name="heart"
               size={24}
-              color={`${isFavorite ? '#7f0000' : colors.gray}`}
+              color={`${isFavorite ? colors.darkRed : colors.gray}`}
             />
           </TouchableOpacity>
           <Text style={styles.favoriteLabel}>
