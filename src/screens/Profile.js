@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { Entypo, Feather, Ionicons, SimpleLineIcons } from '@expo/vector-icons';
 import { format } from 'date-fns';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Alert,
   Image,
@@ -26,14 +26,33 @@ const openUrl = (url) => {
   });
 };
 
-const Profile = ({ actions, navigation, user }) => {
+const Profile = ({ actions, navigation, favorites, user }) => {
   const { userLogin: username } = useContext(FollowersContext);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
     actions.loadUser(username).catch((err) => {
       console.log(err);
     });
   }, []);
+
+  useEffect(() => {
+    const result = favorites.some((favorite) => favorite.id === user.id);
+    console.log('IS FAVORITE: ', result);
+    setIsFavorite(result);
+  }, [favorites, user]);
+
+  const handleAddFavorites = () => {
+    if (isFavorite) {
+      Alert.alert('Duplicate', 'This follower is already in your favorites.');
+    } else {
+      Alert.alert(
+        'Success',
+        'You have successfully added this user to your favorites 🎉',
+      );
+      actions.addToFavorites(user);
+    }
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
@@ -144,13 +163,18 @@ const Profile = ({ actions, navigation, user }) => {
         </View>
 
         <View style={styles.favoritesWrapper}>
-          <TouchableOpacity
-            onPress={() => {
-              actions.addToFavorites(user);
-            }}
-          >
-            <Entypo name="heart" size={24} color="gray" />
+          <TouchableOpacity onPress={handleAddFavorites}>
+            <Entypo
+              name="heart"
+              size={24}
+              color={`${isFavorite ? '#7f0000' : colors.gray}`}
+            />
           </TouchableOpacity>
+          <Text style={styles.favoriteLabel}>
+            {`${
+              isFavorite ? 'Follower already in favorites!' : 'Add to Favorites'
+            }`}
+          </Text>
         </View>
 
         {/* FOOTER */}
@@ -170,6 +194,7 @@ const Profile = ({ actions, navigation, user }) => {
 const mapStateToProps = (state) => {
   return {
     user: state.user,
+    favorites: state.favorites,
   };
 };
 
@@ -279,6 +304,9 @@ const styles = StyleSheet.create({
   favoritesWrapper: {
     alignItems: 'center',
     padding: 5,
+  },
+  favoriteLabel: {
+    fontWeight: '700',
   },
   footer: {
     marginTop: 5,
