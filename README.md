@@ -1,6 +1,6 @@
 # GitHub Followers
 
-:construction: _**Core functionality is done. Only minor implementation details are to be completed!**_
+:construction: _**Core functionality is done. Only minor implementation details are yet to be completed!**_
 
 ![GiHub Followers App Home screen image](https://github.com/khwilo/project-demos/blob/master/GitHubFollowers/github-followers-home-screen.png)
 
