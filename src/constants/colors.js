@@ -8,4 +8,6 @@ export default {
   blueGrey: '#eceff1',
   transparent: 'transparent',
   lightPurple: '#ae52d4',
+  darkRed: '#7f0000',
+  rowSeparatorBorder: '#9e9e9e',
 };
