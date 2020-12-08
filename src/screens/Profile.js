@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { Entypo, Feather, Ionicons, SimpleLineIcons } from '@expo/vector-icons';
 import { format } from 'date-fns';
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Alert,
   Image,
@@ -17,6 +17,7 @@ import { bindActionCreators } from 'redux';
 
 import colors from '../constants/colors';
 import { FollowersContext } from '../contexts/FollowersContext';
+import * as favoriteActions from '../redux/actions/favoriteActions';
 import * as userActions from '../redux/actions/userActions';
 
 const openUrl = (url) => {
@@ -25,14 +26,36 @@ const openUrl = (url) => {
   });
 };
 
-const Profile = ({ actions, navigation, user }) => {
+const Profile = ({ actions, navigation, favorites, user }) => {
   const { userLogin: username } = useContext(FollowersContext);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
     actions.loadUser(username).catch((err) => {
       console.log(err);
     });
   }, []);
+
+  useEffect(() => {
+    const result = favorites.some((favorite) => favorite.id === user.id);
+    setIsFavorite(result);
+  }, [favorites, user]);
+
+  const handleManipulateFavorites = () => {
+    if (isFavorite) {
+      actions.removeFromFavorites(user);
+      Alert.alert(
+        'Success',
+        'You have successfully removed this user from your favorites.',
+      );
+    } else {
+      actions.addToFavorites(user);
+      Alert.alert(
+        'Success',
+        'You have successfully added this user to your favorites 🎉',
+      );
+    }
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
@@ -142,6 +165,19 @@ const Profile = ({ actions, navigation, user }) => {
           </TouchableOpacity>
         </View>
 
+        <View style={styles.favoritesWrapper}>
+          <TouchableOpacity onPress={handleManipulateFavorites}>
+            <Entypo
+              name="heart"
+              size={24}
+              color={`${isFavorite ? colors.darkRed : colors.gray}`}
+            />
+          </TouchableOpacity>
+          <Text style={styles.favoriteLabel}>
+            {`${isFavorite ? 'Remove from favorites' : 'Add to Favorites'}`}
+          </Text>
+        </View>
+
         {/* FOOTER */}
         <View style={styles.footer}>
           <Text style={styles.footerText}>
@@ -159,6 +195,7 @@ const Profile = ({ actions, navigation, user }) => {
 const mapStateToProps = (state) => {
   return {
     user: state.user,
+    favorites: state.favorites,
   };
 };
 
@@ -166,6 +203,14 @@ const mapDispatchToProps = (dispatch) => {
   return {
     actions: {
       loadUser: bindActionCreators(userActions.loadUser, dispatch),
+      addToFavorites: bindActionCreators(
+        favoriteActions.addToFavorites,
+        dispatch,
+      ),
+      removeFromFavorites: bindActionCreators(
+        favoriteActions.removeFromFavorites,
+        dispatch,
+      ),
     },
   };
 };
@@ -262,6 +307,13 @@ const styles = StyleSheet.create({
   btnText: {
     color: colors.white,
     fontSize: 16,
+    fontWeight: '700',
+  },
+  favoritesWrapper: {
+    alignItems: 'center',
+    padding: 5,
+  },
+  favoriteLabel: {
     fontWeight: '700',
   },
   footer: {

@@ -36,11 +36,6 @@ const HomeStack = () => (
         title: 'Search',
         headerTintColor: colors.green,
         headerTitleContainerStyle: { left: 40 },
-        headerRight: () => (
-          <TouchableOpacity style={globalStyles.navHorizontalPadding}>
-            <AntDesign name="plus" size={24} color={colors.green} />
-          </TouchableOpacity>
-        ),
         headerLeft: () => (
           <TouchableOpacity
             onPress={() => navigation.goBack()}
@@ -71,7 +66,10 @@ const FavoritesStack = () => (
           </TouchableOpacity>
         ),
         headerRight: () => (
-          <TouchableOpacity style={globalStyles.navHorizontalPadding}>
+          <TouchableOpacity
+            style={globalStyles.navHorizontalPadding}
+            onPress={() => navigation.navigate('Search')}
+          >
             <AntDesign name="plus" size={24} color={colors.green} />
           </TouchableOpacity>
         ),
