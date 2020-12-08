@@ -1,29 +1,47 @@
+/* eslint-disable import/no-extraneous-dependencies */
+import { AntDesign } from '@expo/vector-icons';
 import React from 'react';
-import { Button, Image, StyleSheet, Text, View } from 'react-native';
+import {
+  FlatList,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 
-import resetFavorites from '../redux/actions/resetAction';
+import RowSeparator from '../components/RowSeparator';
+import colors from '../constants/colors';
 
-const FavoriteView = ({ favorite }) => {
+const Favorites = ({ favorites }) => {
+  const renderItem = ({ item }) => {
+    return (
+      <View style={styles.favoriteViewWrapper}>
+        <View style={styles.imageLoginView}>
+          <Image
+            source={{ uri: `${item.avatar_url}` }}
+            style={styles.followerImage}
+          />
+          <Text style={styles.followerLogin}>{item.login}</Text>
+        </View>
+        <View style={styles.rightIconWrapper}>
+          <TouchableOpacity>
+            <AntDesign name="right" size={24} color="black" />
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  };
+
   return (
-    <View style={styles.favoriteViewContainer}>
-      <Image
-        source={{ uri: `${favorite.avatar_url}` }}
-        style={styles.followerImage}
+    <View style={styles.container}>
+      <FlatList
+        data={favorites}
+        renderItem={renderItem}
+        keyExtractor={(item) => String(item.id)}
+        ItemSeparatorComponent={() => <RowSeparator />}
       />
-      <Text style={styles.followerLogin}>{favorite.login}</Text>
-    </View>
-  );
-};
-
-const Favorites = ({ actions, favorites }) => {
-  return (
-    <View>
-      <Button onPress={() => actions.reset()} title="reset" />
-      {favorites.map((favorite) => (
-        <FavoriteView key={favorite.id} favorite={favorite} />
-      ))}
     </View>
   );
 };
@@ -34,20 +52,21 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    actions: {
-      reset: bindActionCreators(resetFavorites, dispatch),
-    },
-  };
-};
-
 const styles = StyleSheet.create({
-  favoriteViewContainer: {
+  container: {
+    flex: 1,
+    backgroundColor: colors.white,
+  },
+  favoriteViewWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 20,
+    justifyContent: 'space-between',
+    paddingHorizontal: 15,
     paddingVertical: 10,
+  },
+  imageLoginView: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   followerImage: {
     width: 80,
@@ -55,10 +74,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   followerLogin: {
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: '700',
     marginLeft: 10,
   },
+  rightIconWrapper: {
+    color: colors.green,
+  },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Favorites);
+export default connect(mapStateToProps)(Favorites);
