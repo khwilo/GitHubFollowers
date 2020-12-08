@@ -1,6 +1,6 @@
 # GitHub Followers
 
-:construction: _**Work still in progress**_
+:construction: _**Core functionality is done. Only minor implementation details are to be completed!**_
 
 ![GiHub Followers App Home screen image](https://github.com/khwilo/project-demos/blob/master/GitHubFollowers/github-followers-home-screen.png)
 
@@ -22,7 +22,7 @@ This React Native mobile application allows you to:
 - [x] Manage global state using Context API & Redux
 - [x] Paginate network calls requests
 - [ ] Cache images after fetch
-- [ ] Implement persistent storage
+- [x] Implement persistent storage
 - [ ] Animate user avatars on search
 - [ ] Create custom reusable alerts
 
