@@ -4,7 +4,6 @@ import { format } from 'date-fns';
 import React, { useContext, useEffect, useState } from 'react';
 import {
   Alert,
-  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -14,17 +13,19 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import Bio from '../components/Profile/Bio';
+import Card from '../components/Profile/Card';
 import CardButton from '../components/Profile/CardButton';
+import CardContent from '../components/Profile/CardContent';
+import CardContentWrapper from '../components/Profile/CardContentWrapper';
 import CardDetails from '../components/Profile/CardDetails';
 import CardIcon from '../components/Profile/CardIcon';
+import ProfileHeader from '../components/Profile/Header';
 import colors from '../constants/colors';
 import { FollowersContext } from '../contexts/FollowersContext';
 import * as favoriteActions from '../redux/actions/favoriteActions';
 import * as userActions from '../redux/actions/userActions';
 import { openUrl } from '../util';
-import Card from '../components/Profile/Card';
-import CardContentWrapper from '../components/Profile/CardContentWrapper';
-import CardContent from '../components/Profile/CardContent';
 
 const Profile = ({ actions, navigation, favorites, user }) => {
   // TODO: CREATE REUSABLE COMPONENTS
@@ -62,27 +63,9 @@ const Profile = ({ actions, navigation, favorites, user }) => {
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
       <View style={styles.container}>
         {/* PROFILE */}
-        <View style={styles.profile}>
-          <Image
-            source={{ uri: `${user.avatar_url}` }}
-            style={styles.profileImage}
-          />
-          <View style={styles.profileDetails}>
-            <Text style={styles.profileLogin}>{user.login}</Text>
-            <Text style={styles.profileText}>{user.name}</Text>
-            <View style={styles.profileLocation}>
-              <Entypo name="location-pin" size={24} color={colors.gray} />
-              <Text style={styles.profileText}>{user.location}</Text>
-            </View>
-          </View>
-        </View>
+        <ProfileHeader user={user} />
 
-        {/* BIO */}
-        <View style={styles.bio}>
-          <Text style={styles.bioDetails}>
-            {user.bio ? user.bio.trim() : ''}
-          </Text>
-        </View>
+        <Bio details={user.bio} />
 
         {/* Repos and Gists */}
         <Card>
@@ -207,42 +190,6 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 20,
     backgroundColor: colors.white,
-  },
-  profile: {
-    flexDirection: 'row',
-    marginBottom: 15,
-  },
-  profileImage: {
-    width: 120,
-    height: 120,
-    borderRadius: 10,
-    backgroundColor: colors.green,
-  },
-  profileDetails: {
-    marginLeft: 12,
-    flex: 1,
-    justifyContent: 'space-between',
-  },
-  profileLogin: {
-    color: colors.black,
-    fontWeight: '700',
-    fontSize: 24,
-    flexWrap: 'wrap',
-  },
-  profileText: {
-    color: colors.gray,
-    fontSize: 18,
-  },
-  profileLocation: {
-    flexDirection: 'row',
-  },
-  bio: {
-    paddingVertical: 5,
-    marginBottom: 10,
-  },
-  bioDetails: {
-    color: colors.black,
-    fontSize: 16,
   },
   favoritesWrapper: {
     alignItems: 'center',
