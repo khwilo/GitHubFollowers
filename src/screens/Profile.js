@@ -19,6 +19,7 @@ import colors from '../constants/colors';
 import { FollowersContext } from '../contexts/FollowersContext';
 import * as favoriteActions from '../redux/actions/favoriteActions';
 import * as userActions from '../redux/actions/userActions';
+import ProfileCardDetails from '../components/Profile/CardDetails';
 
 const openUrl = (url) => {
   return Linking.openURL(url).catch(() => {
@@ -96,10 +97,10 @@ const Profile = ({ actions, navigation, favorites, user }) => {
                   color={colors.black}
                 />
               </View>
-              <View style={styles.cardDetails}>
-                <Text style={styles.cardText}>Public Repos</Text>
-                <Text style={styles.cardText}>{user.public_repos}</Text>
-              </View>
+              <ProfileCardDetails
+                title="Public Repos"
+                count={user.public_repos}
+              />
             </View>
 
             {/* Gists */}
@@ -107,10 +108,10 @@ const Profile = ({ actions, navigation, favorites, user }) => {
               <View style={[styles.cardContentIcon, styles.iconBars]}>
                 <Feather name="bar-chart-2" size={18} color={colors.black} />
               </View>
-              <View style={styles.cardDetails}>
-                <Text style={styles.cardText}>Public Gists</Text>
-                <Text style={styles.cardText}>{user.public_gists}</Text>
-              </View>
+              <ProfileCardDetails
+                title="Public Gists"
+                count={user.public_gists}
+              />
             </View>
           </View>
 
@@ -134,10 +135,7 @@ const Profile = ({ actions, navigation, favorites, user }) => {
                   color={colors.black}
                 />
               </View>
-              <View style={styles.cardDetails}>
-                <Text style={styles.cardText}>Following</Text>
-                <Text style={styles.cardText}>{user.following}</Text>
-              </View>
+              <ProfileCardDetails title="Following" count={user.following} />
             </View>
 
             {/* Followers */}
@@ -145,10 +143,7 @@ const Profile = ({ actions, navigation, favorites, user }) => {
               <View style={styles.cardContentIcon}>
                 <SimpleLineIcons name="people" size={18} color={colors.black} />
               </View>
-              <View style={styles.cardDetails}>
-                <Text style={styles.cardText}>Followers</Text>
-                <Text style={styles.cardText}>{user.followers}</Text>
-              </View>
+              <ProfileCardDetails title="Followers" count={user.followers} />
             </View>
           </View>
 
@@ -284,14 +279,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     left: -25,
-  },
-  cardDetails: {
-    alignItems: 'center',
-  },
-  cardText: {
-    color: colors.black,
-    fontSize: 14,
-    fontWeight: '700',
   },
   btn: {
     paddingVertical: 10,
