@@ -5,7 +5,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import {
   Alert,
   Image,
-  Linking,
   ScrollView,
   StyleSheet,
   Text,
@@ -15,17 +14,14 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import CardButton from '../components/Profile/CardButton';
+import CardDetails from '../components/Profile/CardDetails';
+import CardIcon from '../components/Profile/CardIcon';
 import colors from '../constants/colors';
 import { FollowersContext } from '../contexts/FollowersContext';
 import * as favoriteActions from '../redux/actions/favoriteActions';
 import * as userActions from '../redux/actions/userActions';
-import ProfileCardDetails from '../components/Profile/CardDetails';
-
-const openUrl = (url) => {
-  return Linking.openURL(url).catch(() => {
-    Alert.alert('Sorry, something went wrong.', 'Please try again later');
-  });
-};
+import { openUrl } from '../util';
 
 const Profile = ({ actions, navigation, favorites, user }) => {
   // TODO: CREATE REUSABLE COMPONENTS
@@ -90,37 +86,31 @@ const Profile = ({ actions, navigation, favorites, user }) => {
           <View style={styles.cardWrapper}>
             {/* Repos */}
             <View style={styles.cardContent}>
-              <View style={styles.cardContentIcon}>
+              <CardIcon>
                 <SimpleLineIcons
                   name="folder-alt"
                   size={18}
                   color={colors.black}
                 />
-              </View>
-              <ProfileCardDetails
-                title="Public Repos"
-                count={user.public_repos}
-              />
+              </CardIcon>
+              <CardDetails title="Public Repos" count={user.public_repos} />
             </View>
 
             {/* Gists */}
             <View style={styles.cardContent}>
-              <View style={[styles.cardContentIcon, styles.iconBars]}>
+              <CardIcon isIconBar>
                 <Feather name="bar-chart-2" size={18} color={colors.black} />
-              </View>
-              <ProfileCardDetails
-                title="Public Gists"
-                count={user.public_gists}
-              />
+              </CardIcon>
+              <CardDetails title="Public Gists" count={user.public_gists} />
             </View>
           </View>
-
-          <TouchableOpacity
-            style={[styles.btn, styles.btnProfile]}
-            onPress={() => openUrl(`https://github.com/${user.login}`)}
-          >
-            <Text style={styles.btnText}>GitHub Profile</Text>
-          </TouchableOpacity>
+          <CardButton
+            title="GitHub Profile"
+            color={colors.lightPurple}
+            handleOnPress={() => {
+              openUrl(`https://github.com/${user.login}`);
+            }}
+          />
         </View>
 
         {/* Following and Followers  */}
@@ -128,37 +118,31 @@ const Profile = ({ actions, navigation, favorites, user }) => {
           {/* Following */}
           <View style={styles.cardWrapper}>
             <View style={styles.cardContent}>
-              <View style={styles.cardContentIcon}>
+              <CardIcon>
                 <Ionicons
                   name="ios-heart-empty"
                   size={18}
                   color={colors.black}
                 />
-              </View>
-              <ProfileCardDetails title="Following" count={user.following} />
+              </CardIcon>
+              <CardDetails title="Following" count={user.following} />
             </View>
 
             {/* Followers */}
             <View style={styles.cardContent}>
-              <View style={styles.cardContentIcon}>
+              <CardIcon>
                 <SimpleLineIcons name="people" size={18} color={colors.black} />
-              </View>
-              <ProfileCardDetails title="Followers" count={user.followers} />
+              </CardIcon>
+              <CardDetails title="Followers" count={user.followers} />
             </View>
           </View>
-
-          <TouchableOpacity
-            style={[styles.btn, styles.btnFollowers]}
-            onPress={
-              () =>
-                navigation.navigate('Followers list', {
-                  username,
-                })
-              // eslint-disable-next-line react/jsx-curly-newline
-            }
-          >
-            <Text style={styles.btnText}>Get Followers</Text>
-          </TouchableOpacity>
+          <CardButton
+            title="Get Followers"
+            color={colors.green}
+            handleOnPress={() => {
+              navigation.navigate('Followers list', { username });
+            }}
+          />
         </View>
 
         <View style={styles.favoritesWrapper}>
@@ -270,32 +254,6 @@ const styles = StyleSheet.create({
   },
   cardContent: {
     flexDirection: 'row',
-  },
-  cardContentIcon: {
-    marginRight: 8,
-  },
-  iconBars: {
-    transform: [{ rotate: '90deg' }],
-    position: 'absolute',
-    top: 0,
-    left: -25,
-  },
-  btn: {
-    paddingVertical: 10,
-    marginVertical: 10,
-    borderRadius: 12,
-    alignItems: 'center',
-  },
-  btnProfile: {
-    backgroundColor: colors.lightPurple,
-  },
-  btnFollowers: {
-    backgroundColor: colors.green,
-  },
-  btnText: {
-    color: colors.white,
-    fontSize: 16,
-    fontWeight: '700',
   },
   favoritesWrapper: {
     alignItems: 'center',
