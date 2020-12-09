@@ -27,6 +27,7 @@ const openUrl = (url) => {
 };
 
 const Profile = ({ actions, navigation, favorites, user }) => {
+  // TODO: CREATE REUSABLE COMPONENTS
   const { userLogin: username } = useContext(FollowersContext);
   const [isFavorite, setIsFavorite] = useState(false);
 
