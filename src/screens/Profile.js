@@ -1,5 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { Entypo, Feather, Ionicons, SimpleLineIcons } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
 import { format } from 'date-fns';
 import React, { useContext, useEffect, useState } from 'react';
 import {
@@ -13,19 +13,16 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import Bio from '../components/Profile/Bio';
-import Card from '../components/Profile/Card';
-import CardButton from '../components/Profile/CardButton';
-import CardContent from '../components/Profile/CardContent';
-import CardContentWrapper from '../components/Profile/CardContentWrapper';
-import CardDetails from '../components/Profile/CardDetails';
-import CardIcon from '../components/Profile/CardIcon';
-import ProfileHeader from '../components/Profile/Header';
+import {
+  Bio,
+  ProfileHeader,
+  ReposGistsView,
+  UserNetworkView,
+} from '../components/Profile';
 import colors from '../constants/colors';
 import { FollowersContext } from '../contexts/FollowersContext';
 import * as favoriteActions from '../redux/actions/favoriteActions';
 import * as userActions from '../redux/actions/userActions';
-import { openUrl } from '../util';
 
 const Profile = ({ actions, navigation, favorites, user }) => {
   // TODO: CREATE REUSABLE COMPONENTS
@@ -67,69 +64,15 @@ const Profile = ({ actions, navigation, favorites, user }) => {
 
         <Bio details={user.bio} />
 
-        {/* Repos and Gists */}
-        <Card>
-          <CardContentWrapper>
-            {/* Repos */}
-            <CardContent>
-              <CardIcon>
-                <SimpleLineIcons
-                  name="folder-alt"
-                  size={18}
-                  color={colors.black}
-                />
-              </CardIcon>
-              <CardDetails title="Public Repos" count={user.public_repos} />
-            </CardContent>
-
-            {/* Gists */}
-            <CardContent>
-              <CardIcon rotateRight>
-                <Feather name="bar-chart-2" size={18} color={colors.black} />
-              </CardIcon>
-              <CardDetails title="Public Gists" count={user.public_gists} />
-            </CardContent>
-          </CardContentWrapper>
-          <CardButton
-            title="GitHub Profile"
-            color={colors.lightPurple}
-            handleOnPress={() => {
-              openUrl(`https://github.com/${user.login}`);
-            }}
-          />
-        </Card>
+        {/* Repos and Gists View */}
+        <ReposGistsView user={user} />
 
         {/* Following and Followers  */}
-        <Card>
-          {/* Following */}
-          <CardContentWrapper>
-            <CardContent>
-              <CardIcon>
-                <Ionicons
-                  name="ios-heart-empty"
-                  size={18}
-                  color={colors.black}
-                />
-              </CardIcon>
-              <CardDetails title="Following" count={user.following} />
-            </CardContent>
-
-            {/* Followers */}
-            <CardContent>
-              <CardIcon>
-                <SimpleLineIcons name="people" size={18} color={colors.black} />
-              </CardIcon>
-              <CardDetails title="Followers" count={user.followers} />
-            </CardContent>
-          </CardContentWrapper>
-          <CardButton
-            title="Get Followers"
-            color={colors.green}
-            handleOnPress={() => {
-              navigation.navigate('Followers list', { username });
-            }}
-          />
-        </Card>
+        <UserNetworkView
+          user={user}
+          username={username}
+          navigation={navigation}
+        />
 
         <View style={styles.favoritesWrapper}>
           <TouchableOpacity onPress={handleManipulateFavorites}>
