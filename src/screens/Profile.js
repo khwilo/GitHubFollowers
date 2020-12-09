@@ -25,7 +25,6 @@ import * as favoriteActions from '../redux/actions/favoriteActions';
 import * as userActions from '../redux/actions/userActions';
 
 const Profile = ({ actions, navigation, favorites, user }) => {
-  // TODO: CREATE REUSABLE COMPONENTS
   const { userLogin: username } = useContext(FollowersContext);
   const [isFavorite, setIsFavorite] = useState(false);
 
@@ -62,6 +61,7 @@ const Profile = ({ actions, navigation, favorites, user }) => {
         {/* PROFILE */}
         <ProfileHeader user={user} />
 
+        {/* BIO */}
         <Bio details={user.bio} />
 
         {/* Repos and Gists View */}
