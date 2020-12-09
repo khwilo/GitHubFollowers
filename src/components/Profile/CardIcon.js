@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-const CardIcon = ({ children, isIconBar }) => {
-  const cardIconStyle = !isIconBar
+const CardIcon = ({ children, rotateRight }) => {
+  const cardIconStyle = !rotateRight
     ? styles.cardIcon
-    : [styles.cardIcon, styles.iconBars];
+    : [styles.cardIcon, styles.rotateIconRight];
 
   return <View style={cardIconStyle}>{children}</View>;
 };
@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
   cardIcon: {
     marginRight: 8,
   },
-  iconBars: {
+  rotateIconRight: {
     transform: [{ rotate: '90deg' }],
     position: 'absolute',
     top: 0,

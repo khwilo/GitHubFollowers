@@ -22,6 +22,9 @@ import { FollowersContext } from '../contexts/FollowersContext';
 import * as favoriteActions from '../redux/actions/favoriteActions';
 import * as userActions from '../redux/actions/userActions';
 import { openUrl } from '../util';
+import Card from '../components/Profile/Card';
+import CardContentWrapper from '../components/Profile/CardContentWrapper';
+import CardContent from '../components/Profile/CardContent';
 
 const Profile = ({ actions, navigation, favorites, user }) => {
   // TODO: CREATE REUSABLE COMPONENTS
@@ -82,10 +85,10 @@ const Profile = ({ actions, navigation, favorites, user }) => {
         </View>
 
         {/* Repos and Gists */}
-        <View style={styles.card}>
-          <View style={styles.cardWrapper}>
+        <Card>
+          <CardContentWrapper>
             {/* Repos */}
-            <View style={styles.cardContent}>
+            <CardContent>
               <CardIcon>
                 <SimpleLineIcons
                   name="folder-alt"
@@ -94,16 +97,16 @@ const Profile = ({ actions, navigation, favorites, user }) => {
                 />
               </CardIcon>
               <CardDetails title="Public Repos" count={user.public_repos} />
-            </View>
+            </CardContent>
 
             {/* Gists */}
-            <View style={styles.cardContent}>
-              <CardIcon isIconBar>
+            <CardContent>
+              <CardIcon rotateRight>
                 <Feather name="bar-chart-2" size={18} color={colors.black} />
               </CardIcon>
               <CardDetails title="Public Gists" count={user.public_gists} />
-            </View>
-          </View>
+            </CardContent>
+          </CardContentWrapper>
           <CardButton
             title="GitHub Profile"
             color={colors.lightPurple}
@@ -111,13 +114,13 @@ const Profile = ({ actions, navigation, favorites, user }) => {
               openUrl(`https://github.com/${user.login}`);
             }}
           />
-        </View>
+        </Card>
 
         {/* Following and Followers  */}
-        <View style={styles.card}>
+        <Card>
           {/* Following */}
-          <View style={styles.cardWrapper}>
-            <View style={styles.cardContent}>
+          <CardContentWrapper>
+            <CardContent>
               <CardIcon>
                 <Ionicons
                   name="ios-heart-empty"
@@ -126,16 +129,16 @@ const Profile = ({ actions, navigation, favorites, user }) => {
                 />
               </CardIcon>
               <CardDetails title="Following" count={user.following} />
-            </View>
+            </CardContent>
 
             {/* Followers */}
-            <View style={styles.cardContent}>
+            <CardContent>
               <CardIcon>
                 <SimpleLineIcons name="people" size={18} color={colors.black} />
               </CardIcon>
               <CardDetails title="Followers" count={user.followers} />
-            </View>
-          </View>
+            </CardContent>
+          </CardContentWrapper>
           <CardButton
             title="Get Followers"
             color={colors.green}
@@ -143,7 +146,7 @@ const Profile = ({ actions, navigation, favorites, user }) => {
               navigation.navigate('Followers list', { username });
             }}
           />
-        </View>
+        </Card>
 
         <View style={styles.favoritesWrapper}>
           <TouchableOpacity onPress={handleManipulateFavorites}>
@@ -240,20 +243,6 @@ const styles = StyleSheet.create({
   bioDetails: {
     color: colors.black,
     fontSize: 16,
-  },
-  card: {
-    backgroundColor: colors.blueGrey,
-    marginVertical: 10,
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderRadius: 12,
-  },
-  cardWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  cardContent: {
-    flexDirection: 'row',
   },
   favoritesWrapper: {
     alignItems: 'center',
