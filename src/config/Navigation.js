@@ -90,7 +90,7 @@ const ProfileStack = () => (
         headerRight: () => (
           <TouchableOpacity
             style={globalStyles.navHorizontalPadding}
-            onPress={() => navigation.navigate('Followers list')}
+            onPress={() => navigation.goBack()}
           >
             <Done />
           </TouchableOpacity>
