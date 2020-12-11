@@ -3,7 +3,6 @@ import { Entypo } from '@expo/vector-icons';
 import { format } from 'date-fns';
 import React, { useContext, useEffect, useState } from 'react';
 import {
-  Alert,
   ScrollView,
   StyleSheet,
   Text,
@@ -13,6 +12,7 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import CustomAlert from '../components/CustomAlert';
 import {
   Bio,
   ProfileHeader,
@@ -27,6 +27,14 @@ import * as userActions from '../redux/actions/userActions';
 const Profile = ({ actions, navigation, favorites, user }) => {
   const { userLogin: username } = useContext(FollowersContext);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
+  const [alertTitle, setAlertTitle] = useState('');
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertButtonText, setAlertButtonText] = useState('');
+
+  const handleOnCancelAlert = () => {
+    setIsAlertVisible(false);
+  };
 
   useEffect(() => {
     actions.loadUser(username).catch((err) => {
@@ -42,22 +50,32 @@ const Profile = ({ actions, navigation, favorites, user }) => {
   const handleManipulateFavorites = () => {
     if (isFavorite) {
       actions.removeFromFavorites(user);
-      Alert.alert(
-        'Success',
-        'You have successfully removed this user from your favorites.',
-      );
+      setIsAlertVisible(true);
+      setAlertTitle('Success');
+      setAlertMessage('You have removed this user from your favorites.');
+      setAlertButtonText('Ok');
     } else {
       actions.addToFavorites(user);
-      Alert.alert(
-        'Success',
+      setIsAlertVisible(true);
+      setAlertTitle('Success');
+      setAlertMessage(
         'You have successfully added this user to your favorites 🎉',
       );
+      setAlertButtonText('Hooray');
     }
   };
 
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
       <View style={styles.container}>
+        <CustomAlert
+          title={alertTitle}
+          message={alertMessage}
+          buttonText={alertButtonText}
+          isVisible={isAlertVisible}
+          onCancel={() => handleOnCancelAlert()}
+        />
+
         {/* PROFILE */}
         <ProfileHeader user={user} />
 
@@ -70,7 +88,7 @@ const Profile = ({ actions, navigation, favorites, user }) => {
         {/* Following and Followers  */}
         <UserNetworkView
           user={user}
-          username={username}
+          username={user.login || username}
           navigation={navigation}
         />
 

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
-  Alert,
   KeyboardAvoidingView,
   StyleSheet,
   Text,
@@ -11,20 +10,31 @@ import {
 
 import colors from '../constants/colors';
 import globalStyles from '../styles/global';
+import CustomAlert from './CustomAlert';
 
 const FormInput = ({ actions, navigation }) => {
   const [username, setUsername] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isDataFetched, setIsDataFetched] = useState(false);
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
+  const [alertTitle, setAlertTitle] = useState('');
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertButtonText, setAlertButtonText] = useState('');
+
+  const handleOnCancelAlert = () => {
+    setIsAlertVisible(false);
+  };
 
   const getFollowers = async () => {
     setIsLoading(true);
 
     if (username.length === 0) {
-      Alert.alert(
-        'Empty Username',
+      setIsAlertVisible(true);
+      setAlertTitle('Empty Username');
+      setAlertMessage(
         'Please enter a username. We need to know who to look for 😀.',
       );
+      setAlertButtonText('Ok');
       setIsLoading(false);
       setIsDataFetched(false);
     } else {
@@ -39,13 +49,19 @@ const FormInput = ({ actions, navigation }) => {
           setIsDataFetched(false);
           setIsLoading(false);
           setUsername('');
-          Alert.alert('User not found', 'Try searching for another user 😔.');
+          setIsAlertVisible(true);
+          setAlertTitle('User not found');
+          setAlertMessage('Try searching for another user 😔.');
+          setAlertButtonText('Ok');
         }
       } catch (error) {
         setIsDataFetched(false);
         setIsLoading(false);
         setUsername('');
-        Alert.alert('Loading followers failed', error);
+        setIsAlertVisible(true);
+        setAlertTitle('Loading followers failed');
+        setAlertMessage(error);
+        setAlertButtonText('Ok');
       }
     }
   };
@@ -58,6 +74,13 @@ const FormInput = ({ actions, navigation }) => {
 
   return (
     <KeyboardAvoidingView style={styles.formInput}>
+      <CustomAlert
+        title={alertTitle}
+        message={alertMessage}
+        buttonText={alertButtonText}
+        isVisible={isAlertVisible}
+        onCancel={() => handleOnCancelAlert()}
+      />
       <TextInput
         style={[globalStyles.formControl, styles.textInput]}
         onChangeText={(value) => setUsername(value)}
