@@ -24,7 +24,7 @@ This React Native mobile application allows you to:
 - [ ] Cache images after fetch
 - [x] Implement persistent storage
 - [ ] Animate user avatars on search
-- [ ] Create custom reusable alerts
+- [x] Create custom reusable alerts
 
 ## Credit
 
