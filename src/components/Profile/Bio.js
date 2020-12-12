@@ -6,7 +6,7 @@ import colors from '../../constants/colors';
 const Bio = ({ details }) => (
   <View style={styles.bio}>
     <Text style={styles.bioDetails}>
-      {details ? details.replace(/\s+/g, ' ') : ''}
+      {details ? details.replace(/\s+/g, ' ').trim() : ''}
     </Text>
   </View>
 );
