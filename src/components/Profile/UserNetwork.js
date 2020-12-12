@@ -10,7 +10,7 @@ import CardContentWrapper from './CardContentWrapper';
 import CardDetails from './CardDetails';
 import CardIcon from './CardIcon';
 
-const UserNetwork = ({ user, username, navigation }) => (
+const UserNetwork = ({ user, username, navigation, isButtonDisabled }) => (
   <Card>
     {/* Following */}
     <CardContentWrapper>
@@ -18,7 +18,7 @@ const UserNetwork = ({ user, username, navigation }) => (
         <CardIcon>
           <Ionicons name="ios-heart-empty" size={18} color={colors.black} />
         </CardIcon>
-        <CardDetails title="Following" count={user.following} />
+        <CardDetails title="Following" count={user.following || ''} />
       </CardContent>
 
       {/* Followers */}
@@ -26,13 +26,14 @@ const UserNetwork = ({ user, username, navigation }) => (
         <CardIcon>
           <SimpleLineIcons name="people" size={18} color={colors.black} />
         </CardIcon>
-        <CardDetails title="Followers" count={user.followers} />
+        <CardDetails title="Followers" count={user.followers || ''} />
       </CardContent>
     </CardContentWrapper>
     <CardButton
       title="Get Followers"
       color={colors.green}
       handleOnPress={() => {
+        if (isButtonDisabled) return;
         navigation.navigate('Followers list', { username });
       }}
     />
