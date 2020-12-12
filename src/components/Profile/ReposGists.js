@@ -19,7 +19,7 @@ const ReposGists = ({ user }) => (
         <CardIcon>
           <SimpleLineIcons name="folder-alt" size={18} color={colors.black} />
         </CardIcon>
-        <CardDetails title="Public Repos" count={user.public_repos} />
+        <CardDetails title="Public Repos" count={user.public_repos || ''} />
       </CardContent>
 
       {/* Gists */}
@@ -27,7 +27,7 @@ const ReposGists = ({ user }) => (
         <CardIcon rotateRight>
           <Feather name="bar-chart-2" size={18} color={colors.black} />
         </CardIcon>
-        <CardDetails title="Public Gists" count={user.public_gists} />
+        <CardDetails title="Public Gists" count={user.public_gists || ''} />
       </CardContent>
     </CardContentWrapper>
     <CardButton

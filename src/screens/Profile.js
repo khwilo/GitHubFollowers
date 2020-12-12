@@ -3,7 +3,6 @@ import { Entypo } from '@expo/vector-icons';
 import { format } from 'date-fns';
 import React, { useContext, useEffect, useState } from 'react';
 import {
-  Alert,
   ScrollView,
   StyleSheet,
   Text,
@@ -13,6 +12,8 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import { getRemainingRateLimit } from '../api';
+import CustomAlert from '../components/CustomAlert';
 import {
   Bio,
   ProfileHeader,
@@ -21,16 +22,37 @@ import {
 } from '../components/Profile';
 import colors from '../constants/colors';
 import { FollowersContext } from '../contexts/FollowersContext';
+import useCustomAlert from '../hooks/useCustomAlert';
 import * as favoriteActions from '../redux/actions/favoriteActions';
 import * as userActions from '../redux/actions/userActions';
 
 const Profile = ({ actions, navigation, favorites, user }) => {
   const { userLogin: username } = useContext(FollowersContext);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [disableButton, setDisableButton] = useState(false);
+  const [alertStore, dispatchAlert] = useCustomAlert();
+
+  const { alert } = alertStore;
 
   useEffect(() => {
-    actions.loadUser(username).catch((err) => {
-      console.log(err);
+    getRemainingRateLimit().then((rate) => {
+      if (rate.remaining > 0) {
+        setDisableButton(false);
+        actions.loadUser(username).catch((err) => {
+          console.log(err);
+        });
+      } else {
+        setDisableButton(true);
+        dispatchAlert({
+          type: 'SHOW_ALERT',
+          payload: {
+            title: 'API Call',
+            message:
+              'API rate limit exceeded. Please wait for at least an hour to make another call.',
+            buttonText: 'Ok',
+          },
+        });
+      }
     });
   }, []);
 
@@ -40,29 +62,62 @@ const Profile = ({ actions, navigation, favorites, user }) => {
   }, [favorites, user]);
 
   const handleManipulateFavorites = () => {
-    if (isFavorite) {
-      actions.removeFromFavorites(user);
-      Alert.alert(
-        'Success',
-        'You have successfully removed this user from your favorites.',
-      );
+    if (!disableButton) {
+      if (isFavorite) {
+        actions.removeFromFavorites(user);
+        dispatchAlert({
+          type: 'SHOW_ALERT',
+          payload: {
+            title: 'Success',
+            message: 'You have removed this user from your favorites.',
+            buttonText: 'Ok',
+          },
+        });
+      } else {
+        actions.addToFavorites(user);
+        dispatchAlert({
+          type: 'SHOW_ALERT',
+          payload: {
+            title: 'Success',
+            message:
+              'You have successfully added this user to your favorites 🎉',
+            buttonText: 'Hooray',
+          },
+        });
+      }
     } else {
-      actions.addToFavorites(user);
-      Alert.alert(
-        'Success',
-        'You have successfully added this user to your favorites 🎉',
-      );
+      dispatchAlert({
+        type: 'SHOW_ALERT',
+        payload: {
+          title: 'API Call',
+          message:
+            'API rate limit exceeded. Please wait for at least an hour to perform this operation.',
+          buttonText: 'Ok',
+        },
+      });
     }
+  };
+
+  const handleOnCancelAlert = () => {
+    dispatchAlert({ type: 'HIDE_ALERT' });
   };
 
   return (
     <ScrollView contentContainerStyle={styles.scrollViewContent}>
       <View style={styles.container}>
+        <CustomAlert
+          title={alert.title}
+          message={alert.message}
+          buttonText={alert.buttonText}
+          isVisible={alert.isVisible}
+          onCancel={() => handleOnCancelAlert()}
+        />
+
         {/* PROFILE */}
         <ProfileHeader user={user} />
 
         {/* BIO */}
-        <Bio details={user.bio} />
+        <Bio details={user.bio || ''} />
 
         {/* Repos and Gists View */}
         <ReposGistsView user={user} />
@@ -70,8 +125,9 @@ const Profile = ({ actions, navigation, favorites, user }) => {
         {/* Following and Followers  */}
         <UserNetworkView
           user={user}
-          username={username}
+          username={user.login || username}
           navigation={navigation}
+          isButtonDisabled={disableButton}
         />
 
         <View style={styles.favoritesWrapper}>
@@ -90,10 +146,15 @@ const Profile = ({ actions, navigation, favorites, user }) => {
         {/* FOOTER */}
         <View style={styles.footer}>
           <Text style={styles.footerText}>
-            {`GitHub since ${
-              user.created_at &&
-              format(new Date(user.created_at.split('T')[0]), 'MMM do, yyyy')
-            }`}
+            {user.created_at
+              ? `GitHub since ${
+                  user.created_at &&
+                  format(
+                    new Date(user.created_at.split('T')[0]),
+                    'MMM do, yyyy',
+                  )
+                }`
+              : ''}
           </Text>
         </View>
       </View>

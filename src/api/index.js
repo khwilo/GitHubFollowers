@@ -41,3 +41,14 @@ export const getLastPage = async (loginName) => {
     throw error;
   }
 };
+
+export const getRemainingRateLimit = async () => {
+  try {
+    const response = await fetch('https://api.github.com/rate_limit');
+    const { rate } = await response.json();
+    return rate;
+  } catch (error) {
+    console.log('[ERROR FETCHING RATE LIMIT]: ', error);
+    throw error;
+  }
+};

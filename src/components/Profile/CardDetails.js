@@ -5,8 +5,8 @@ import colors from '../../constants/colors';
 
 const CardDetails = ({ title, count }) => (
   <View style={styles.cardDetails}>
-    <Text style={styles.cardText}>{title}</Text>
-    <Text style={styles.cardText}>{count}</Text>
+    <Text style={styles.cardText}>{title || ''}</Text>
+    <Text style={styles.cardText}>{count || ''}</Text>
   </View>
 );
 

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
-  Alert,
   KeyboardAvoidingView,
   StyleSheet,
   Text,
@@ -9,24 +8,39 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import { getRemainingRateLimit } from '../api';
 import colors from '../constants/colors';
+import useCustomAlert from '../hooks/useCustomAlert';
 import globalStyles from '../styles/global';
+import CustomAlert from './CustomAlert';
 
 const FormInput = ({ actions, navigation }) => {
   const [username, setUsername] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isDataFetched, setIsDataFetched] = useState(false);
+  const [alertStore, dispatchAlert] = useCustomAlert();
+
+  const { alert } = alertStore;
+
+  const handleOnCancelAlert = () => {
+    dispatchAlert({ type: 'HIDE_ALERT' });
+  };
 
   const getFollowers = async () => {
     setIsLoading(true);
 
     if (username.length === 0) {
-      Alert.alert(
-        'Empty Username',
-        'Please enter a username. We need to know who to look for 😀.',
-      );
       setIsLoading(false);
       setIsDataFetched(false);
+      dispatchAlert({
+        type: 'SHOW_ALERT',
+        payload: {
+          title: 'Empty Username',
+          message:
+            'Please enter a username. We need to know who to look for 😀.',
+          buttonText: 'Ok',
+        },
+      });
     } else {
       try {
         const data = await actions.loadFollowers(username);
@@ -39,13 +53,41 @@ const FormInput = ({ actions, navigation }) => {
           setIsDataFetched(false);
           setIsLoading(false);
           setUsername('');
-          Alert.alert('User not found', 'Try searching for another user 😔.');
+          const rate = await getRemainingRateLimit();
+
+          if (rate.remaining > 0) {
+            dispatchAlert({
+              type: 'SHOW_ALERT',
+              payload: {
+                title: 'User not found',
+                message: 'Try searching for another user 😔.',
+                buttonText: 'Ok',
+              },
+            });
+          } else {
+            dispatchAlert({
+              type: 'SHOW_ALERT',
+              payload: {
+                title: 'API Call',
+                message:
+                  'API rate limit exceeded. Please wait for at least an hour to make another call.',
+                buttonText: 'Ok',
+              },
+            });
+          }
         }
       } catch (error) {
         setIsDataFetched(false);
         setIsLoading(false);
         setUsername('');
-        Alert.alert('Loading followers failed', error);
+        dispatchAlert({
+          type: 'SHOW_ALERT',
+          payload: {
+            title: 'Loading followers failed',
+            message: error,
+            buttonText: 'Ok',
+          },
+        });
       }
     }
   };
@@ -58,6 +100,13 @@ const FormInput = ({ actions, navigation }) => {
 
   return (
     <KeyboardAvoidingView style={styles.formInput}>
+      <CustomAlert
+        title={alert.title}
+        message={alert.message}
+        buttonText={alert.buttonText}
+        isVisible={alert.isVisible}
+        onCancel={() => handleOnCancelAlert()}
+      />
       <TextInput
         style={[globalStyles.formControl, styles.textInput]}
         onChangeText={(value) => setUsername(value)}

@@ -9,5 +9,7 @@ export default {
   transparent: 'transparent',
   lightPurple: '#ae52d4',
   darkRed: '#7f0000',
+  default600Red: '#e53935',
   rowSeparatorBorder: '#9e9e9e',
+  modalBgColor: 'rgba(0,0,0,0.5)',
 };

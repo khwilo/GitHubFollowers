@@ -9,8 +9,8 @@ import rootReducer from './reducers/index';
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whiteList: ['favorites'], // Reducers to save
-  blackList: ['appUser', 'user', 'followers'], // Reducers to omit from saving
+  whiteList: ['appUser', 'user', 'followers', 'favorites'], // Reducers to save
+  blackList: [], // Reducers to omit from saving
 };
 
 // Redux persist persisted reducer

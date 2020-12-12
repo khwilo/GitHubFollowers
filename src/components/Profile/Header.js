@@ -9,11 +9,11 @@ const Header = ({ user }) => (
   <View style={styles.profile}>
     <Image source={{ uri: `${user.avatar_url}` }} style={styles.profileImage} />
     <View style={styles.profileDetails}>
-      <Text style={styles.profileLogin}>{user.login}</Text>
-      <Text style={styles.profileText}>{user.name}</Text>
+      <Text style={styles.profileLogin}>{user.login || ''}</Text>
+      <Text style={styles.profileText}>{user.name || ''}</Text>
       <View style={styles.profileLocation}>
         <Entypo name="location-pin" size={24} color={colors.gray} />
-        <Text style={styles.profileText}>{user.location}</Text>
+        <Text style={styles.profileText}>{user.location || ''}</Text>
       </View>
     </View>
   </View>
