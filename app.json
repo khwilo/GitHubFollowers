@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "GitHubFollowers",
-    "slug": "GitHubFollowers",
+    "name": "GitHub Followers",
+    "slug": "github-followers",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -13,11 +13,15 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
+      "bundleIdentifier": "com.khwilo.githubfollowers",
+      "buildNumber": "1.0.0",
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.khwilo.githubfollowers",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/favicon.png"
