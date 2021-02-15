@@ -26,6 +26,18 @@ This React Native mobile application allows you to:
 - [ ] Animate user avatars on search
 - [x] Create custom reusable alerts
 
+## Getting Started
+
+1. Clone this repository:
+
+```bash
+git clone https://github.com/khwilo/GitHubFollowers.git
+```
+
+2. Run `yarn` or `npm install` to install the project dependencies.
+
+3. Run `yarn start` or `npm start` to run a local developed version of this application.
+
 ## Credit
 
 [Khwilo Kabaka](https://www.github.com).
