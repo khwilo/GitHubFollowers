@@ -4,6 +4,8 @@
 
 ![GiHub Followers App Home screen image](https://github.com/khwilo/project-demos/blob/master/GitHubFollowers/github-followers-home-screen.png)
 
+Download the application from the Google Play Store: [Application link](https://play.google.com/store/apps/details?id=com.khwilo.githubfollowers)
+
 This React Native mobile application allows you to:
 
 - Fetch the followers for a particular GitHub user
